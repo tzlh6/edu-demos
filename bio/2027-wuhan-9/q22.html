@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定位基因 C · 武汉九调生物第 22 题</title>
+<style>
+  :root{--ink:#1d1d1f;--sub:#5f6368;--line:#d0d4da;--bg:#fafafa;--card:#fff;--j:#4a4f57;--hl:#fff4c2;--bad:#b3261e;--ok:#1e7d32}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:18px 16px 6px}
+  h1{font-size:20px;margin:0 0 4px}
+  .tag{display:inline-block;font-size:12px;color:#fff;background:var(--ink);border-radius:4px;padding:1px 6px;margin-right:6px}
+  .lead{color:var(--sub);font-size:14px;margin:0}
+  section{background:var(--card);margin:12px;border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{font-size:17px;margin:0 0 8px}
+  svg{width:100%;height:auto;display:block;touch-action:manipulation}
+  .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  button{font:inherit;font-size:14px;border:1px solid var(--ink);background:#fff;border-radius:18px;padding:4px 10px;margin:3px 4px 0 0;cursor:pointer}
+  button.on{background:var(--ink);color:#fff}
+  .box{background:var(--hl);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+  .note{font-size:14px;color:var(--sub);margin:8px 0 0}
+  .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--sub);margin-top:4px}
+  .legend span::before{content:"";display:inline-block;width:14px;height:10px;border:1px solid #333;margin-right:4px;vertical-align:0}
+  .legend .lj::before{background:var(--j)}
+  .scan{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:8px;font-size:12px;text-align:center}
+  .scan div{border:1px solid var(--line);border-radius:6px;padding:2px 0;cursor:pointer}
+  .scan div b{display:block;font-size:16px}
+  .scan div.zero{border-color:var(--ok);background:#e8f5e9}
+  .scan div.sel{outline:2px solid var(--ink)}
+  input[type=range]{width:100%;height:32px}
+  label.sl{display:block;font-size:14px;margin-top:6px}
+  details{margin-top:8px} summary{cursor:pointer;font-weight:600}
+  footer{color:var(--sub);font-size:12px;text-align:center;padding:4px 16px 24px}
+  sub,sup{font-size:70%}
+</style>
+</head>
+<body>
+<header>
+  <h1>RIL 群体定位基因 C</h1>
+  <p class="lead"><span class="tag">第 22 题</span>9 个株系的 1 号染色体由粳稻、籼稻片段拼成。点选两个相邻标记之间的区间，看哪个区间的基因型与“冷处理后分蘖多少”完全对得上。</p>
+</header>
+
+<section>
+  <h2>一、逐个区间检验（第 2 问）</h2>
+  <svg id="chr" viewBox="0 0 360 262" aria-label="株系 1 号染色体组成与分蘖比例"></svg>
+  <div class="legend"><span class="lj">粳稻片段</span><span>籼稻片段</span><span>右侧条：存活植株中分蘖的比例（读图约值）</span></div>
+  <div class="row" style="margin-top:6px"><button id="hypJ" class="on">假设：分蘖多 ↔ 粳稻型 C</button><button id="hypI">假设：分蘖多 ↔ 籼稻型 C</button></div>
+  <p class="note">下面每格是一个区间，数字是“对不上”的株系数。点格子或直接点上图的区间。</p>
+  <div class="scan" id="scan"></div>
+  <div class="box" id="res"></div>
+  <details><summary>为什么要逐个区间“对账”？</summary>
+  <p class="note">RIL 每个株系都是纯合的，某一区间要么全是粳稻片段，要么全是籼稻片段。基因 C 决定低温下的分蘖能力，所以 C 所在区间的基因型必须和分蘖表型<b>每个株系都一致</b>：分蘖多的 5 个株系（R1～R5）在这里应同为一种类型，分蘖少的 4 个株系（R6～R9）应同为另一种。题干“基因结构不完整时通常会导致其功能丧失”提示：判断时把 C 看成完整地落在两个相邻标记之间，按区间逐个检验即可。</p></details>
+</section>
+
+<section>
+  <h2>二、改数据：自己出一道定位题</h2>
+  <p class="note" style="margin-top:0">打开“改数据”后，点某株系的某一段可在粳／籼之间切换，点右侧分蘖条可在“多／少”之间切换；上面的检验结果会同步更新。想一想：要把区间缩到更小，需要什么样的新株系？</p>
+  <div class="row"><button id="edit">改数据：关</button><button id="reset">恢复题目数据</button></div>
+  <div class="box" id="edittip">提示：在 ④～⑤ 之间再找到一个交换点的株系，就能把范围继续缩小——这正是“增加群体株系、加密分子标记”的意义。</div>
+</section>
+
+<section>
+  <h2>三、电泳图说明了什么（第 3 问）</h2>
+  <svg id="gel" viewBox="0 0 360 200" aria-label="凝胶电泳示意"></svg>
+  <label class="sl">①组蛋白与 <i>TCP19</i> 启动子探针的结合能力：<b id="b1v">80</b>%</label>
+  <input id="b1" type="range" min="0" max="100" value="80">
+  <label class="sl">②组蛋白的结合能力：<b id="b2v">35</b>%</label>
+  <input id="b2" type="range" min="0" max="100" value="35">
+  <div class="box" id="geltxt"></div>
+  <p class="note">条带浓淡按“结合的探针占比”示意；题图中①组上方条带浓、下方淡，②组相反。</p>
+</section>
+
+<footer>配合《生物参考答案与详解》第 22 题使用 · 自制教学资源 · 不收集任何数据</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+const MK=[47,188,216,252,290,305,327,341,354,366,393];   // 标记①～⑪在原图中的横向位置
+const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪';
+// 每个株系：分界标记（1～11）与左侧类型；J=粳稻，I=籼稻
+const DATA=[[4,'I'],[2,'I'],[6,'J'],[10,'J'],[8,'J'],[9,'I'],[3,'J'],[7,'I'],[5,'I']];
+const TILL0=[77,61,68,74,57,10,15,8,12];
+let G, HIGH, sel=3, hyp='J', edit=false;
+function reset(){
+  G=DATA.map(([b,left])=>Array.from({length:10},(_,k)=> (k+1<b)? left : (left==='J'?'I':'J')));
+  HIGH=TILL0.map(v=>v>40);
+}
+const X=p=>40+(p-47)/(393-47)*250, ROW=i=>16+i*23;
+function mism(k){return G.reduce((s,row,i)=>s+((row[k]===hyp)!==HIGH[i]?1:0),0)}
+function draw(){
+  const s=$('chr'); s.innerHTML='';
+  const a=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);s.appendChild(e);return e};
+  // 选中区间底色
+  a('rect',{x:X(MK[sel]),y:6,width:X(MK[sel+1])-X(MK[sel]),height:212,fill:'#fff4c2'});
+  MK.forEach((m,j)=>{a('line',{x1:X(m),y1:8,x2:X(m),y2:222,stroke:'#555','stroke-dasharray':'3 3','stroke-width':.8});
+    a('text',{x:X(m)-4,y:238,'font-size':9.5}).textContent=CIRC[j];});
+  G.forEach((row,i)=>{
+    a('text',{x:4,y:ROW(i)+12,'font-size':12}).textContent='R'+(i+1);
+    row.forEach((t,k)=>{const r=a('rect',{x:X(MK[k]),y:ROW(i),width:X(MK[k+1])-X(MK[k]),height:14,fill:t==='J'?'#4a4f57':'#fff',stroke:'#333','stroke-width':.8});
+      r.style.cursor='pointer'; r.onclick=()=>{ if(edit){G[i][k]=G[i][k]==='J'?'I':'J';} else sel=k; draw(); };});
+    const bad=(row[sel]===hyp)!==HIGH[i];
+    a('text',{x:296,y:ROW(i)+12,'font-size':13,fill:bad?'#b3261e':'#1e7d32','font-weight':700}).textContent=bad?'✗':'✓';
+    const w=(edit? (HIGH[i]?70:12) : TILL0[i])*0.5;
+    const bar=a('rect',{x:310,y:ROW(i)+2,width:w,height:10,fill:'url(#hatch)',stroke:'#333','stroke-width':.8});
+    bar.style.cursor=edit?'pointer':'default'; bar.onclick=()=>{ if(edit){HIGH[i]=!HIGH[i];draw();} };
+  });
+  const d=document.createElementNS(NS,'defs');d.innerHTML='<pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="4" fill="#fff"/><line x1="0" y1="0" x2="0" y2="4" stroke="#333" stroke-width="1.2"/></pattern>';s.prepend(d);
+  a('text',{x:306,y:256,'font-size':10,fill:'#5f6368'}).textContent='分蘖比例';
+  a('text',{x:40,y:256,'font-size':10,fill:'#5f6368'}).textContent='✓/✗：所选区间基因型与表型是否相符';
+  // scan
+  const sc=$('scan'); sc.innerHTML='';
+  for(let k=0;k<10;k++){const m=mism(k);const e=document.createElement('div');
+    e.className=(m===0?'zero ':'')+(k===sel?'sel':''); e.innerHTML=`${CIRC[k]}${CIRC[k+1]}<b>${m}</b>`; e.onclick=()=>{sel=k;draw()}; sc.appendChild(e);}
+  const m=mism(sel), zeros=[...Array(10).keys()].filter(k=>mism(k)===0);
+  const other=hyp==='J'?'I':'J';
+  let txt=`区间 ${CIRC[sel]}～${CIRC[sel+1]}：${m===0?'<b style="color:#1e7d32">9 个株系全部对得上</b>':`有 <b style="color:#b3261e">${m}</b> 个株系对不上：`+G.map((r,i)=>((r[sel]===hyp)!==HIGH[i])?'R'+(i+1):'').filter(Boolean).join('、')}。<br>`;
+  txt+= zeros.length? `在当前假设下，只有 <b>${zeros.map(k=>CIRC[k]+'～'+CIRC[k+1]).join('、')}</b> 完全吻合${!edit&&hyp==='J'?'——基因 C 位于 ④⑤ 之间。':'。'}`
+                    : `当前假设下没有任何区间完全吻合${!edit&&hyp==='I'?'——说明“分蘖多对应籼稻型”这一假设不成立：分蘖多的株系在 C 处是粳稻片段。':'。'}`;
+  if(!edit&&hyp==='J'&&sel===4) txt+='<br>⑤～⑥ 不行：R9 在这里是粳稻片段，分蘖却很少。';
+  if(!edit&&hyp==='J'&&sel===2) txt+='<br>③～④ 不行：R1 在这里还是籼稻片段，分蘖却很多。';
+  $('res').innerHTML=txt;
+  $('hypJ').classList.toggle('on',hyp==='J');$('hypI').classList.toggle('on',hyp==='I');
+  $('edit').textContent='改数据：'+(edit?'开':'关');$('edit').classList.toggle('on',edit);
+}
+$('hypJ').onclick=()=>{hyp='J';draw()}; $('hypI').onclick=()=>{hyp='I';draw()};
+$('edit').onclick=()=>{edit=!edit;draw()}; $('reset').onclick=()=>{reset();edit=false;draw()};
+// ---- gel ----
+function gel(){
+  const b1=+$('b1').value,b2=+$('b2').value; $('b1v').textContent=b1;$('b2v').textContent=b2;
+  const s=$('gel'); s.innerHTML='';
+  const a=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);s.appendChild(e);return e};
+  const lanes=[['−',0],['①',b1],['②',b2]], x0=112, w=50;
+  a('text',{x:10,y:28,'font-size':12}).textContent='C1 或 C2 蛋白';
+  a('text',{x:10,y:48,'font-size':12,'font-style':'italic'}).textContent='TCP19';
+  a('text',{x:52,y:48,'font-size':12}).textContent='启动子探针';
+  lanes.forEach(([n,b],j)=>{const cx=x0+j*w+w/2;
+    a('text',{x:cx-5,y:12,'font-size':12}).textContent=j?n:'';
+    a('text',{x:cx-4,y:28,'font-size':13}).textContent=j?'+':'−';
+    a('text',{x:cx-4,y:48,'font-size':13}).textContent='+';
+    const g1=Math.round(255-200*b/100), g2=Math.round(255-200*(100-b)/100);
+    a('rect',{x:cx-17,y:80,width:34,height:9,fill:`rgb(${g1},${g1},${g1})`});
+    a('rect',{x:cx-17,y:172,width:34,height:9,fill:`rgb(${g2},${g2},${g2})`});});
+  a('rect',{x:x0-6,y:58,width:3*w+12,height:134,fill:'none',stroke:'#333'});
+  a('line',{x1:96,y1:70,x2:96,y2:180,stroke:'#333','marker-end':'url(#ar)'});
+  const d=document.createElementNS(NS,'defs');d.innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z"/></marker>';s.prepend(d);
+  a('text',{x:4,y:130,'font-size':11}).textContent='探针电泳方向';
+  a('text',{x:x0+3*w+10,y:88,'font-size':11,fill:'#5f6368'}).textContent='结合的探针（慢）';
+  a('text',{x:x0+3*w+10,y:180,'font-size':11,fill:'#5f6368'}).textContent='游离探针（快）';
+  const more=b1>b2?'①':(b2>b1?'②':'两组一样');
+  $('geltxt').innerHTML=`没加蛋白的一组只有下方条带（探针全游离）；加了 C 蛋白后出现上方条带，说明 C 蛋白能<b>与 <i>TCP19</i> 启动子结合</b>。<i>TCP19</i> 抑制分蘖，C 蛋白结合其启动子、<b>抑制 <i>TCP19</i> 的转录</b>，从而促进分蘖。`+
+   (b1!==b2?`<br>${more}组上方条带更浓——结合得更多、抑制 <i>TCP19</i> 更强、促进分蘖更明显。粳稻型（<i>C1</i>）株系分蘖更多，所以${more}组加入的是 <b>C1</b> 蛋白。`:'');
+}
+$('b1').oninput=gel;$('b2').oninput=gel;
+reset(); draw(); gel();
+</script>
+</body>
+</html>
