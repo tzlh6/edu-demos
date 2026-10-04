@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分布系数曲线 · 武汉九调化学第 15 题</title>
+<style>
+  :root{--ink:#1d1d1f;--sub:#5f6368;--line:#d0d4da;--bg:#fafafa;--card:#fff;
+        --c1:#1f4e79;--c2:#b45309;--c3:#2e7d32;--hl:#fff4c2}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:18px 16px 6px}
+  h1{font-size:20px;margin:0 0 4px}
+  .tag{display:inline-block;font-size:12px;color:#fff;background:var(--ink);border-radius:4px;padding:1px 6px;margin-right:6px}
+  .lead{color:var(--sub);font-size:14px;margin:0}
+  section{background:var(--card);margin:12px;border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{font-size:17px;margin:0 0 8px}
+  svg{width:100%;height:auto;display:block;touch-action:none}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input[type=range]{width:100%;height:32px}
+  .read{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+  .read div{border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;font-size:14px}
+  .read b{display:block;font-size:18px}
+  .k1{color:var(--c1)}.k2{color:var(--c2)}.k3{color:var(--c3)}
+  .note{font-size:14px;color:var(--sub);margin:8px 0 0}
+  button{font:inherit;font-size:14px;border:1px solid var(--ink);background:#fff;border-radius:18px;padding:4px 12px;margin:4px 6px 0 0}
+  button.on{background:var(--ink);color:#fff}
+  .box{background:var(--hl);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+  .bars{margin-top:8px}
+  .bar{display:flex;align-items:center;gap:6px;margin:4px 0;font-size:14px}
+  .bar span:first-child{width:76px;flex:none}
+  .bar i{display:block;height:14px;background:var(--ink);border-radius:3px}
+  .bar em{font-style:normal;color:var(--sub);white-space:nowrap}
+  details{margin-top:8px}
+  summary{cursor:pointer;font-weight:600}
+  footer{color:var(--sub);font-size:12px;text-align:center;padding:4px 16px 24px}
+  sub,sup{font-size:70%}
+</style>
+</head>
+<body>
+<header>
+  <h1>分布系数曲线怎么读</h1>
+  <p class="lead"><span class="tag">第 15 题</span>常温下 H<sub>2</sub>A 溶液中各粒子分布系数 δ 与 −lg c(OH<sup>−</sup>) 的关系。拖动滑块，看三种粒子此消彼长。</p>
+</header>
+
+<section>
+  <h2>一、拖动：c(OH<sup>−</sup>) 变小，酸性变强</h2>
+  <svg id="plot" viewBox="0 0 360 250" aria-label="分布系数曲线"></svg>
+  <input id="s" type="range" min="0" max="14" step="0.05" value="7" aria-label="−lg c(OH−)">
+  <div class="row" style="justify-content:space-between;font-size:14px">
+    <span>−lg c(OH<sup>−</sup>) = <b id="poh">7.00</b></span><span>pH = <b id="ph">7.00</b></span>
+  </div>
+  <div class="read">
+    <div class="k1">δ(H<sub>2</sub>A)<b id="d0">0.50</b></div>
+    <div class="k2">δ(HA<sup>−</sup>)<b id="d1">0.50</b></div>
+    <div class="k3">δ(A<sup>2−</sup>)<b id="d2">0.00</b></div>
+  </div>
+  <div class="row">
+    <button data-go="7">跳到交点 ①②</button><button data-go="1">跳到交点 ②③</button>
+  </div>
+  <p class="note">横轴从左到右 −lg c(OH<sup>−</sup>) 减小 → c(OH<sup>−</sup>) 增大 → 碱性增强。所以从左到右依次是 H<sub>2</sub>A 占优、HA<sup>−</sup> 占优、A<sup>2−</sup> 占优：曲线①是 δ(H<sub>2</sub>A)，②是 δ(HA<sup>−</sup>)，③是 δ(A<sup>2−</sup>)。</p>
+</section>
+
+<section>
+  <h2>二、交点为什么就是 K<sub>a</sub></h2>
+  <div class="box">在 ①② 交点，δ(H<sub>2</sub>A) = δ(HA<sup>−</sup>)，即 c(H<sub>2</sub>A) = c(HA<sup>−</sup>)，代入<br>
+  K<sub>a1</sub> = c(H<sup>+</sup>)·c(HA<sup>−</sup>) ⁄ c(H<sub>2</sub>A) = c(H<sup>+</sup>)。<br>
+  交点处 −lg c(OH<sup>−</sup>) = 7，pH = 7，所以 <b>K<sub>a1</sub> = 10<sup>−7</sup></b>；同理 ②③ 交点 pH = 13，<b>K<sub>a2</sub> = 10<sup>−13</sup></b>。</div>
+  <details><summary>C 项：K 怎么化成已知常数？</summary>
+  <p>MA + 2H<sup>+</sup> ⇌ M<sup>2+</sup> + H<sub>2</sub>A，K = c(M<sup>2+</sup>)·c(H<sub>2</sub>A) ⁄ c<sup>2</sup>(H<sup>+</sup>)。分子分母同乘 c(A<sup>2−</sup>)·c(HA<sup>−</sup>)，就拆成<br>
+  K = K<sub>sp</sub>(MA) ⁄ (K<sub>a1</sub>·K<sub>a2</sub>) = 10<sup>−26</sup> ⁄ (10<sup>−7</sup>×10<sup>−13</sup>) = <b>10<sup>−6</sup></b>，不是 10<sup>6</sup>。</p></details>
+</section>
+
+<section>
+  <h2>三、Na<sub>2</sub>A 溶液：谁的浓度大</h2>
+  <input id="c" type="range" min="0.001" max="0.1" step="0.001" value="0.01" aria-label="Na2A 浓度">
+  <p style="font-size:14px;margin:0">c(Na<sub>2</sub>A) = <b id="cv">0.010</b> mol·L<sup>−1</sup>　K<sub>h1</sub> = K<sub>w</sub> ⁄ K<sub>a2</sub> = 0.1</p>
+  <div class="bars" id="bars"></div>
+  <p class="note">A<sup>2−</sup> + H<sub>2</sub>O ⇌ HA<sup>−</sup> + OH<sup>−</sup> 的 K<sub>h1</sub> 很大，A<sup>2−</sup> 大部分水解；HA<sup>−</sup> 再水解（K<sub>h2</sub> = 10<sup>−7</sup>）又补充少量 OH<sup>−</sup>，所以始终 c(Na<sup>+</sup>) &gt; c(OH<sup>−</sup>) &gt; c(HA<sup>−</sup>) &gt; c(A<sup>2−</sup>)。（条形长度按对数比例画。）</p>
+</section>
+
+<footer>配合《化学参考答案与详解》第 15 题使用 · 自制教学资源</footer>
+
+<script>
+const Ka1=1e-7,Ka2=1e-13,Kw=1e-14;
+const W=360,H=250,L=40,R=12,T=14,B=40,pw=W-L-R,ph=H-T-B;
+// 横轴与原题一致：左 14 → 右 0（−lg c(OH−) 递减）
+const X=v=>L+(14-v)/14*pw, Y=d=>T+(1-d)*ph;
+function dist(pOH){const h=Math.pow(10,-(14-pOH)),D=h*h+Ka1*h+Ka1*Ka2;return[h*h/D,Ka1*h/D,Ka1*Ka2/D];}
+const svg=document.getElementById('plot'),NS='http://www.w3.org/2000/svg';
+function el(t,a,p=svg){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;}
+// 坐标轴与刻度
+el('rect',{x:L,y:T,width:pw,height:ph,fill:'none',stroke:'#888','stroke-width':1});
+for(let v=0;v<=14;v+=2){el('line',{x1:X(v),x2:X(v),y1:T+ph,y2:T+ph+4,stroke:'#888'});
+  const t=el('text',{x:X(v),y:T+ph+17,'text-anchor':'middle','font-size':11,fill:'#444'});t.textContent=v;}
+for(let d=0;d<=1.001;d+=0.2){el('line',{x1:L-4,x2:L,y1:Y(d),y2:Y(d),stroke:'#888'});
+  const t=el('text',{x:L-7,y:Y(d)+4,'text-anchor':'end','font-size':11,fill:'#444'});t.textContent=d.toFixed(1);}
+const xl=el('text',{x:L+pw/2,y:H-6,'text-anchor':'middle','font-size':12,fill:'#222'});xl.textContent='−lg c(OH⁻)';
+const yl=el('text',{x:12,y:T+ph/2,'font-size':12,fill:'#222',transform:`rotate(-90 12 ${T+ph/2})`,'text-anchor':'middle'});yl.textContent='δ';
+// 三条曲线（线型与原书一致：实线、点线、点划线）
+const cols=['var(--c1)','var(--c2)','var(--c3)'],dash=['','2 3','7 3 2 3'],lab=['①','②','③'];
+for(let i=0;i<3;i++){let d='';for(let v=14;v>=0;v-=0.05){const y=dist(v)[i];d+=(d?'L':'M')+X(v).toFixed(1)+','+Y(y).toFixed(1);}
+  el('path',{d,fill:'none',stroke:cols[i],'stroke-width':2.2,'stroke-dasharray':dash[i]});}
+[[12.6,0.82],[4.6,0.80],[2.9,0.62]].forEach(([v,d],i)=>{const t=el('text',{x:X(v),y:Y(d),'font-size':15,fill:cols[i]});t.textContent=lab[i];});
+// 交点辅助线
+[7,1].forEach(v=>el('line',{x1:X(v),x2:X(v),y1:Y(0.5),y2:T+ph,stroke:'#999','stroke-dasharray':'3 3'}));
+const vline=el('line',{y1:T,y2:T+ph,stroke:'#111','stroke-width':1.2});
+const dots=[0,1,2].map(i=>el('circle',{r:4.5,fill:cols[i],stroke:'#fff','stroke-width':1.5}));
+const s=document.getElementById('s');
+function upd(){const v=+s.value,d=dist(v);vline.setAttribute('x1',X(v));vline.setAttribute('x2',X(v));
+  d.forEach((y,i)=>{dots[i].setAttribute('cx',X(v));dots[i].setAttribute('cy',Y(y));document.getElementById('d'+i).textContent=y.toFixed(2);});
+  document.getElementById('poh').textContent=v.toFixed(2);document.getElementById('ph').textContent=(14-v).toFixed(2);}
+s.addEventListener('input',upd);
+// 直接在图上拖动
+function drag(e){const r=svg.getBoundingClientRect(),px=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+  const v=14-((px*W/r.width)-L)/pw*14;s.value=Math.max(0,Math.min(14,v));upd();}
+svg.addEventListener('pointerdown',e=>{drag(e);svg.setPointerCapture(e.pointerId);});
+svg.addEventListener('pointermove',e=>{if(e.buttons)drag(e);});
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{s.value=b.dataset.go;upd();});
+upd();
+// ③ Na2A 溶液
+const c=document.getElementById('c');
+function hyd(){const C=+c.value,Kh1=Kw/Ka2,Kh2=Kw/Ka1;
+  const x=(-Kh1+Math.sqrt(Kh1*Kh1+4*Kh1*C))/2;          // 第一步水解
+  const y=Kh2;                                          // 第二步：x·y/x 近似 → c(H2A)≈Kh2
+  const v={'c(Na⁺)':2*C,'c(OH⁻)':x+y,'c(HA⁻)':x-y,'c(A²⁻)':C-x};
+  document.getElementById('cv').textContent=C.toFixed(3);
+  const lo=-8,hi=0,box=document.getElementById('bars');box.innerHTML='';
+  for(const k in v){const lg=Math.log10(v[k]),w=Math.max(4,(lg-lo)/(hi-lo)*100);
+    box.insertAdjacentHTML('beforeend',`<div class="bar"><span>${k}</span><i style="width:${w*0.6}%"></i><em>${fmt(v[k])}</em></div>`);}
+}
+function fmt(n){const [m,e]=n.toExponential(2).split('e');return m+'×10<sup>'+(+e)+'</sup>';}
+c.addEventListener('input',hyd);hyd();
+</script>
+</body>
+</html>
