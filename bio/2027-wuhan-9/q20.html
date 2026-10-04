@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ca²⁺ 转运实验台 · 武汉九调生物第 20 题</title>
+<style>
+  :root{--ink:#1d1d1f;--sub:#5f6368;--line:#d0d4da;--bg:#fafafa;--card:#fff;--ca:#1f6fb2;--hl:#fff4c2;--bad:#b3261e;--ok:#1e7d32}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:18px 16px 6px}
+  h1{font-size:20px;margin:0 0 4px}
+  .tag{display:inline-block;font-size:12px;color:#fff;background:var(--ink);border-radius:4px;padding:1px 6px;margin-right:6px}
+  .lead{color:var(--sub);font-size:14px;margin:0}
+  section{background:var(--card);margin:12px;border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{font-size:17px;margin:0 0 8px}
+  svg{width:100%;height:auto;display:block}
+  label.sl{display:block;font-size:14px;margin-top:6px}
+  input[type=range]{width:100%;height:32px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  button{font:inherit;font-size:14px;border:1px solid var(--ink);background:#fff;border-radius:18px;padding:4px 12px;margin:4px 6px 0 0;cursor:pointer}
+  button.on{background:var(--ink);color:#fff}
+  .read{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+  .read div{border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;font-size:13px}
+  .read b{display:block;font-size:18px}
+  .box{background:var(--hl);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+  .note{font-size:14px;color:var(--sub);margin:8px 0 0}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:3px 2px;text-align:center}
+  th{background:#f1f3f4;font-weight:600;font-size:13px}
+  td input{width:58px;font:inherit;font-size:15px;padding:2px;border:1px solid var(--line);border-radius:4px;text-align:center}
+  td select{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  td.v{font-weight:700}
+  .del{border:none;padding:0 4px;margin:0;color:var(--sub);font-size:18px}
+  .verdict{margin-top:8px;font-size:15px;border-left:4px solid var(--ink);padding:6px 10px;background:#f6f7f8;border-radius:0 8px 8px 0}
+  .verdict .bad{color:var(--bad);font-weight:700}.verdict .ok{color:var(--ok);font-weight:700}
+  details{margin-top:8px} summary{cursor:pointer;font-weight:600}
+  footer{color:var(--sub);font-size:12px;text-align:center;padding:4px 16px 24px}
+  sub,sup{font-size:70%}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ca<sup>2+</sup> 转运实验台</h1>
+  <p class="lead"><span class="tag">第 20 题</span>人工囊泡膜上有转运蛋白 A。调膜内外 Ca<sup>2+</sup> 浓度、蛋白数量和 ATP，看运输速率；再自己设计对照实验。</p>
+</header>
+
+<section>
+  <h2>一、单个囊泡：拖动看速率</h2>
+  <svg id="ves" viewBox="0 0 360 230" aria-label="人工囊泡示意"></svg>
+  <label class="sl">膜外 Ca<sup>2+</sup> 初始浓度：<b id="ov">2</b> μmol/L</label>
+  <input id="o" type="range" min="-1" max="7" step="0.25" value="1" aria-label="膜外浓度（对数刻度）">
+  <label class="sl">膜内 Ca<sup>2+</sup> 初始浓度：<b id="iv">100</b> μmol/L</label>
+  <input id="i" type="range" min="1" max="3" step="0.05" value="2" aria-label="膜内浓度（对数刻度）">
+  <div class="row"><button id="p2">转运蛋白 A：1 倍</button><button id="atp" class="on">ATP：有</button></div>
+  <div class="read"><div>运输速率相对值<b id="rate">70</b></div><div>方向<b>膜外→膜内</b></div><div>载体状态<b id="sat">未饱和</b></div></div>
+  <p class="note">速率按题中表 1 的数据插值（膜外 0.5～128 μmol/L）；“蛋白加倍”“去掉 ATP”是依据主动运输原理的推演示意，不是题目数据。</p>
+</section>
+
+<section>
+  <h2>二、方向怎么判断（第 1 问）</h2>
+  <svg id="curve" viewBox="0 0 360 222" aria-label="速率随膜外浓度变化"></svg>
+  <div class="row"><button id="hyp1" class="on">假设：膜外→膜内</button><button id="hyp2">假设：膜内→膜外</button></div>
+  <div class="box" id="hyptxt"></div>
+</section>
+
+<section>
+  <h2>三、我来设计对照实验（第 3 问）</h2>
+  <p class="note" style="margin-top:0">目的：验证“Ca<sup>2+</sup> 的运输速率不受膜两侧浓度差的影响”。先载入题中的实验乙、丙，再改数字或加组，看系统怎样判断。</p>
+  <div class="row"><button data-load="jia">载入实验甲</button><button data-load="yi">载入实验乙</button><button data-load="bing" >载入实验丙</button><button id="add">＋ 加一组</button></div>
+  <table id="design"><thead><tr><th>组</th><th>膜外<br>μmol/L</th><th>膜内<br>μmol/L</th><th>蛋白 A</th><th>ATP</th><th>速率</th><th></th></tr></thead><tbody></tbody></table>
+  <div class="verdict" id="verdict"></div>
+  <details><summary>标准答案怎么写？</summary>
+  <p class="note">选②（仅实验丙能）。理由：转运蛋白 A 数量是无关变量；实验乙中各组膜外浓度≥16 μmol/L，转运蛋白 A 结合 Ca<sup>2+</sup> 已达饱和，速率都是最大值，不论浓度差如何都测不出差别，干扰结果；实验丙膜外浓度固定为 2 μmol/L（未饱和），只改变膜内浓度（即浓度差），速率始终为 70，说明速率不受浓度差影响。</p></details>
+</section>
+
+<footer>配合《生物参考答案与详解》第 20 题使用 · 自制教学资源 · 不收集任何数据</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const pts=[[0,0],[0.5,25],[1,45],[2,70],[4,88],[8,97],[16,100]];
+function g(o){ if(o<=0) return 0; if(o>=16) return 100;
+  for(let j=1;j<pts.length;j++){ if(o<=pts[j][0]){const [x0,y0]=pts[j-1],[x1,y1]=pts[j]; return y0+(y1-y0)*(o-x0)/(x1-x0);} } return 100; }
+function rate(o,i,p,atp){ return atp? Math.round(g(o)*p) : 0; }
+function fmt(v){return v>=10? Math.round(v)+'' : (+v.toFixed(2))+''}
+let O=2,I=100,P=1,ATP=true;
+// ---- vesicle ----
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,par){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(par||$('ves')).appendChild(e);return e}
+let ions=[];
+function drawVes(){
+  const s=$('ves'); s.innerHTML='';
+  el('text',{x:10,y:18,'font-size':13,fill:'#5f6368'}).textContent='膜外';
+  el('circle',{cx:180,cy:120,r:82,fill:'#f4f8fc',stroke:'#333','stroke-width':6});
+  el('circle',{cx:180,cy:120,r:82,fill:'none',stroke:'#fff','stroke-width':3});
+  el('text',{x:166,y:124,'font-size':13,fill:'#5f6368'}).textContent='膜内';
+  const nP=P*4;
+  for(let j=0;j<nP;j++){const a=-Math.PI/2+j*2*Math.PI/nP+.2, x=180+82*Math.cos(a), y=120+82*Math.sin(a);
+    el('rect',{x:x-7,y:y-11,width:14,height:22,rx:3,fill:ATP?'#7a8a99':'#c9cfd6',stroke:'#333','stroke-width':1,transform:`rotate(${a*180/Math.PI+90} ${x} ${y})`});}
+  el('text',{x:10,y:224,'font-size':12,fill:'#5f6368'}).textContent= ATP?'灰块：转运蛋白 A（消耗 ATP）　蓝点：Ca²⁺':'无 ATP：转运蛋白 A 不工作';
+  // ions：膜外数量、膜内数量按浓度的对数取（只是示意）
+  ions=[];
+  const nOut=Math.round(4+7*Math.log2(O+1)/7), nIn=Math.round(4+8*Math.log10(I)/3);
+  for(let j=0;j<nOut;j++) ions.push(spawnOut());
+  for(let j=0;j<nIn;j++){const a=Math.random()*2*Math.PI, r=Math.random()*62;
+    ions.push({x:180+r*Math.cos(a),y:120+r*Math.sin(a),out:false});}
+  ions.forEach(o=>{o.e=el('circle',{cx:o.x,cy:o.y,r:4,fill:'#1f6fb2'})});
+}
+function spawnOut(){let x,y;do{x=10+Math.random()*340;y=10+Math.random()*200;}while(Math.hypot(x-180,y-120)<97);return {x,y,out:true}}
+let t0=performance.now();
+function anim(t){
+  const v=rate(O,I,P,ATP)/100, dt=Math.min(.05,(t-t0)/1000); t0=t;
+  ions.forEach(o=>{ if(o.out && v>0){ const dx=180-o.x, dy=120-o.y, d=Math.hypot(dx,dy);
+      o.x+=dx/d*40*v*dt; o.y+=dy/d*40*v*dt;
+      if(d<66){const n=spawnOut(); o.x=n.x;o.y=n.y;}
+      o.e.setAttribute('cx',o.x.toFixed(1));o.e.setAttribute('cy',o.y.toFixed(1));}});
+  requestAnimationFrame(anim);
+}
+function renderOne(){
+  $('ov').textContent=fmt(O); $('iv').textContent=fmt(I);
+  const r=rate(O,I,P,ATP); $('rate').textContent=r;
+  $('sat').textContent=!ATP?'不工作':(O>=16?'已饱和':'未饱和');
+  $('p2').textContent='转运蛋白 A：'+P+' 倍'; $('atp').textContent='ATP：'+(ATP?'有':'无'); $('atp').classList.toggle('on',ATP);
+  drawVes();
+}
+$('o').oninput=e=>{O=+(2**(+e.target.value)).toFixed(3);renderOne()};
+$('i').oninput=e=>{I=Math.round(10**(+e.target.value));renderOne()};
+$('p2').onclick=()=>{P=P===1?2:1;renderOne()};
+$('atp').onclick=()=>{ATP=!ATP;renderOne()};
+// ---- curve ----
+let hyp=1;
+function drawCurve(){
+  const s=$('curve'); s.innerHTML='';
+  const X=v=>40+300*(Math.log2(v)+1)/8, Y=v=>180-150*v/100;
+  const a=(t,at,p)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);(p||s).appendChild(e);return e};
+  a('line',{x1:40,y1:180,x2:345,y2:180,stroke:'#333'});a('line',{x1:40,y1:180,x2:40,y2:20,stroke:'#333'});
+  [0.5,1,2,4,8,16,32,64,128].forEach(v=>{a('text',{x:X(v)-6,y:196,'font-size':11}).textContent=v});
+  [0,50,100].forEach(v=>{a('text',{x:14,y:Y(v)+4,'font-size':11}).textContent=v});
+  a('text',{x:96,y:216,'font-size':11,fill:'#5f6368'}).textContent='膜外初始浓度/(μmol/L)，对数刻度';
+  a('text',{x:44,y:16,'font-size':11,fill:'#5f6368'}).textContent='运输速率相对值';
+  const data=[[0.5,25],[1,45],[2,70],[4,88],[8,97],[16,100],[32,100],[64,100],[128,100]];
+  a('polyline',{points:data.map(d=>X(d[0])+','+Y(d[1])).join(' '),fill:'none',stroke:'#1f6fb2','stroke-width':2});
+  data.forEach(d=>a('circle',{cx:X(d[0]),cy:Y(d[1]),r:3.5,fill:'#1f6fb2'}));
+  a('text',{x:196,y:Y(100)+18,'font-size':12,fill:'#1f6fb2'}).textContent='题中实测（膜内 100）';
+  if(hyp===2){ const pred=data.map(d=>[d[0],Math.max(2,95*(100-d[0])/100)]);
+    a('polyline',{points:pred.map(d=>X(d[0])+','+Y(d[1])).join(' '),fill:'none',stroke:'#b3261e','stroke-width':2,'stroke-dasharray':'6 4'});
+    a('text',{x:150,y:Y(45),'font-size':12,fill:'#b3261e'}).textContent='若膜内→膜外：应变慢'; }
+  $('hyptxt').innerHTML= hyp===1?
+   '膜外浓度越高，速率越大，直到 16 μmol/L 后不再增加——膜外的 Ca<sup>2+</sup> 是“原料”，原料越多运得越快，所以 Ca<sup>2+</sup> 是<b>从膜外运进膜内</b>。膜外 0.5 μmol/L 远低于膜内 100 μmol/L 时仍能运进，是<b>逆浓度梯度</b>运输，因此是<b>主动运输</b>，转运蛋白 A 还要能<b>催化 ATP 水解</b>供能。':
+   '如果 Ca<sup>2+</sup> 由膜内运到膜外，膜外浓度升高时膜两侧浓度差缩小、原料（膜内 Ca<sup>2+</sup>）不变，速率应当不变或减慢（红色虚线是这一假设的定性预期，非题目数据）；而实测速率随膜外浓度升高而加快，<b>与假设矛盾</b>，所以方向是膜外→膜内。';
+  $('hyp1').classList.toggle('on',hyp===1);$('hyp2').classList.toggle('on',hyp===2);
+}
+$('hyp1').onclick=()=>{hyp=1;drawCurve()}; $('hyp2').onclick=()=>{hyp=2;drawCurve()};
+// ---- design table ----
+const presets={
+  jia:[[0.5,100],[1,100],[2,100],[4,100],[8,100],[16,100],[32,100],[64,100],[128,100]].map(([o,i])=>({o,i,p:1,atp:1})),
+  yi:[16,32,64,128].map(o=>({o,i:100,p:1,atp:1})),
+  bing:[50,100,200,500].map(i=>({o:2,i,p:1,atp:1}))
+};
+let rows=JSON.parse(JSON.stringify(presets.bing));
+function renderTable(){
+  const tb=$('design').tBodies[0]; tb.innerHTML='';
+  rows.forEach((r,n)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${n+1}</td><td><input type="number" step="any" min="0" value="${r.o}"></td><td><input type="number" step="any" min="0" value="${r.i}"></td>`+
+      `<td><select><option value="1">1 倍</option><option value="2">2 倍</option></select></td><td><select><option value="1">有</option><option value="0">无</option></select></td>`+
+      `<td class="v">${rate(r.o,r.i,r.p,r.atp)}</td><td><button class="del" aria-label="删除">×</button></td>`;
+    const [io,ii]=tr.querySelectorAll('input'), [sp,sa]=tr.querySelectorAll('select');
+    sp.value=r.p; sa.value=r.atp;
+    io.onchange=()=>{r.o=Math.max(0,+io.value||0);renderTable()}; ii.onchange=()=>{r.i=Math.max(0,+ii.value||0);renderTable()};
+    sp.onchange=()=>{r.p=+sp.value;renderTable()}; sa.onchange=()=>{r.atp=+sa.value;renderTable()};
+    tr.querySelector('.del').onclick=()=>{rows.splice(n,1);renderTable()};
+    tb.appendChild(tr);
+  });
+  judge();
+}
+function judge(){
+  const v=$('verdict');
+  if(rows.length<2){v.innerHTML='至少要有两组才能比较。';return}
+  const names={o:'膜外浓度',i:'膜内浓度',p:'转运蛋白 A 数量',atp:'ATP'};
+  const vary=Object.keys(names).filter(k=>new Set(rows.map(r=>r[k])).size>1);
+  const same=Object.keys(names).filter(k=>!vary.includes(k));
+  const sat=rows.filter(r=>r.atp&&r.o>=16).length;
+  const gradVaries=new Set(rows.map(r=>r.i-r.o)).size>1;
+  const rates=new Set(rows.map(r=>rate(r.o,r.i,r.p,r.atp)));
+  let s=`<b>自变量</b>（各组不同）：${vary.map(k=>names[k]).join('、')||'无'}；<b>无关变量</b>（各组相同）：${same.map(k=>names[k]).join('、')||'无'}。<br>`;
+  let ok=false, why=[];
+  if(!gradVaries) why.push('各组膜两侧浓度差都一样，根本没有改变“浓度差”');
+  if(vary.includes('o')) why.push('改变了膜外浓度——它是 Ca<sup>2+</sup> 的来源（实验甲 0.5～8 μmol/L 已表明它直接影响速率），速率变不变说明不了“浓度差”的作用');
+  if(vary.includes('p')) why.push('转运蛋白 A 数量不同，是没控制好的无关变量');
+  if(vary.includes('atp')||rows.some(r=>!r.atp)) why.push('有的组没有 ATP，主动运输无法进行');
+  if(sat) why.push(`有 ${sat} 组膜外浓度≥16 μmol/L，转运蛋白 A 结合 Ca<sup>2+</sup> 已<b>饱和</b>，速率已到最大值，即使浓度差有影响也测不出来`);
+  if(!why.length){ ok=true; }
+  if(ok) s+=`<span class="ok">能验证：</span>只改变了膜内浓度（浓度差），膜外浓度固定且未饱和，各组速率${rates.size===1?'都相同':'不同'}，${rates.size===1?'说明运输速率不受膜两侧浓度差影响':'说明速率受浓度差影响'}。`;
+  else s+=`<span class="bad">不能验证：</span>${why.join('；')}。`;
+  v.innerHTML=s;
+}
+document.querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{rows=JSON.parse(JSON.stringify(presets[b.dataset.load]));renderTable()});
+$('add').onclick=()=>{const last=rows[rows.length-1]||{o:2,i:100,p:1,atp:1};rows.push({...last});renderTable()};
+renderOne(); drawCurve(); renderTable(); requestAnimationFrame(anim);
+</script>
+</body>
+</html>
