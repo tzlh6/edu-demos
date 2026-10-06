@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>丙烯氢甲酰化 · 湖南九校联盟一联化学第 18 题</title>
+<style>
+  :root{--ink:#1d1d1f;--sub:#5f6368;--line:#d0d4da;--bg:#fafafa;--card:#fff;
+        --c1:#1f4e79;--c2:#b45309;--c3:#2e7d32;--c4:#6b21a8;--hl:#fff4c2}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:18px 16px 6px}
+  h1{font-size:20px;margin:0 0 4px;line-height:1.35}
+  .tag{display:inline-block;font-size:12px;color:#fff;background:var(--ink);border-radius:4px;padding:1px 6px;margin-right:6px}
+  .lead{color:var(--sub);font-size:14px;margin:0}
+  section{background:var(--card);margin:12px;border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{font-size:17px;margin:0 0 6px;line-height:1.4}
+  h2 small{font-weight:400;color:var(--sub);font-size:13px}
+  svg{width:100%;height:auto;display:block}
+  #graph{touch-action:none}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  label.sl{display:block;font-size:14px;margin-top:6px}
+  label.sl b{display:inline-block}
+  input[type=range]{width:100%;height:32px;margin:0}
+  button{font:inherit;font-size:14px;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:18px;padding:5px 12px;margin:6px 6px 0 0;cursor:pointer}
+  button.on{background:var(--ink);color:#fff}
+  button:disabled{opacity:.4}
+  .box{background:var(--hl);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+  .note{font-size:13.5px;color:var(--sub);margin:8px 0 0}
+  .read{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+  .read div{border:1px solid var(--line);border-radius:8px;padding:6px 6px;text-align:center;font-size:13.5px}
+  .read b{display:block;font-size:19px}
+  .k1{color:var(--c1)}.k2{color:var(--c2)}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:4px 5px;text-align:center}
+  th{background:#f1f3f5;font-weight:600}
+  td.on{background:var(--hl);font-weight:700}
+  .bar{display:flex;height:30px;border:1px solid #888;border-radius:4px;overflow:hidden;margin-top:4px}
+  .bar span{display:flex;align-items:center;justify-content:center;font-size:12px;white-space:nowrap;overflow:hidden;border-right:1px solid #888}
+  .bar span:last-child{border-right:0}
+  .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;margin-top:6px}
+  .legend span{display:flex;align-items:center;gap:4px}
+  .legend i{display:inline-block;width:14px;height:14px;border:1px solid #888;border-radius:2px}
+  .s1{background:#e3e6ea}.s2{background:#b9c0c8}.s3{background:#4b5563;color:#fff}.s4{background:#fff}
+  .meter{margin-top:8px;font-size:14px}
+  .meter .track{height:16px;background:#eef0f2;border-radius:8px;overflow:hidden;margin-top:2px}
+  .meter i{display:block;height:100%;border-radius:8px}
+  .eq{font-size:17px;text-align:center;padding:8px 4px;border:1px dashed #aaa;border-radius:8px;margin-top:8px;line-height:1.8}
+  .chk{font-size:14px;display:flex;align-items:center;gap:6px;margin-top:4px}
+  .chk input{width:20px;height:20px;flex:none}
+  details{margin-top:8px;font-size:15px}
+  summary{cursor:pointer;font-weight:600}
+  footer{color:var(--sub);font-size:12px;text-align:center;padding:4px 16px 24px}
+  sub,sup{font-size:70%}
+</style>
+</head>
+<body>
+<header>
+  <h1>丙烯氢甲酰化：能量图、读双轴图、记账、配平</h1>
+  <p class="lead"><span class="tag">第 18 题</span>五个小工具对应（1）～（4）问。数值与纸面详解一致；标“示意”的图只表示变化趋势，不是实测数据。</p>
+</header>
+
+<!-- ========== （1） ========== -->
+<section>
+  <h2>一、能量图看盖斯定律<small>（第 1 问）</small></h2>
+  <div class="row">
+    <button data-r="1">反应Ⅰ</button><button data-r="2">反应Ⅱ</button><button data-r="3" class="on">目标：异丁醛 → 正丁醛</button>
+  </div>
+  <svg id="energy" viewBox="0 0 360 230" aria-label="能量图"></svg>
+  <div class="box" id="etxt"></div>
+  <h2 style="margin-top:12px;font-size:16px">自发性：ΔG = ΔH − TΔS，点一点</h2>
+  <table id="gtab">
+    <tr><th></th><th>ΔS &gt; 0</th><th>ΔS &lt; 0</th></tr>
+    <tr><th>ΔH &lt; 0</th><td data-c="ns">任何温度都自发</td><td data-c="nn">低温自发</td></tr>
+    <tr><th>ΔH &gt; 0</th><td data-c="ps">高温自发</td><td data-c="pn">任何温度都不自发</td></tr>
+  </table>
+  <p class="note" id="gtxt">本题目标反应 ΔH = +6.2 kJ·mol<sup>−1</sup> &gt; 0，又“能够自发进行”——只能落在“ΔH &gt; 0、ΔS &gt; 0”这一格，所以 ΔS &gt; 0。点表格里的格子看看其他情况。</p>
+</section>
+
+<!-- ========== （2） ========== -->
+<section>
+  <h2>二、CO 分压：不能太高，也不能太低<small>（第 2 问，示意）</small></h2>
+  <label class="sl">p(CO) = <b id="pv">10.0</b> MPa
+    <input id="p" type="range" min="1" max="20" step="0.5" value="10"></label>
+  <div class="meter">醛的生成速率（题给：r ∝ p<sup>−1</sup>(CO)）<div class="track"><i id="m1" style="background:var(--c1)"></i></div></div>
+  <div class="meter">醛的平衡产率（CO 是反应Ⅰ、Ⅱ的反应物）<div class="track"><i id="m2" style="background:var(--c3)"></i></div></div>
+  <div class="meter">催化剂 Co<sub>2</sub>(CO)<sub>8</sub> 保留程度（CO 是分解反应的生成物）<div class="track"><i id="m3" style="background:var(--c2)"></i></div></div>
+  <div class="box" id="ptxt"></div>
+  <p class="note">三条横条只表示“p(CO) 变大、变小时朝哪个方向变”，长度不是实测数据。题目给的事实是：r ∝ p<sup>−1</sup>(CO)；Co<sub>2</sub>(CO)<sub>8</sub>(g) ⇌ 2Co(s) + 8CO(g)；工业上选 10 MPa。</p>
+</section>
+
+<!-- ========== （3）①② ========== -->
+<section>
+  <h2>三、读双轴图：哪条线配哪个轴？<small>（第 3 问①②）</small></h2>
+  <svg id="graph" viewBox="0 0 360 250" aria-label="丙烯转化率与比值随温度的变化"></svg>
+  <label class="sl">温度 T = <b id="tv">132.0</b> ℃（也可以直接在图上拖动）
+    <input id="T" type="range" min="121" max="150" step="0.1" value="132"></label>
+  <div class="row"><button data-t="128.3">128.3 ℃</button><button data-t="132" class="on">132 ℃</button></div>
+  <div class="read">
+    <div class="k1">丙烯平衡转化率<br>（黑线，读<b style="display:inline;font-size:14px">左轴</b>）<b id="r1">—</b></div>
+    <div class="k2">n(正丁醛)/n(异丁醛)<br>（灰线，读<b style="display:inline;font-size:14px">右轴</b>）<b id="r2">—</b></div>
+  </div>
+  <div class="box" id="gtxt2"></div>
+  <p class="note">曲线按原题图描摹；128.3 ℃、132 ℃ 的读数与题图一致，其他温度的读数只用来练习读图。</p>
+  <details><summary>为什么说本题的图和数据“打架”？</summary>
+    <p>比值 n(正丁醛)/n(异丁醛) 就是“异丁醛 ⇌ 正丁醛”的平衡常数（所以第（3）②问 K<sub>p</sub> = 67）。第（1）问算出这个反应 ΔH = +6.2 kJ·mol<sup>−1</sup>，是吸热反应，升温 K 应增大、比值应增大；而图中比值随温度升高而减小。考场上按图和参考答案作答：“两反应均放热，升温均逆向移动，反应Ⅰ逆向移动程度更大”；但不要用“反应Ⅰ放热更多”作理由——题给数据正好相反。</p></details>
+</section>
+
+<!-- ========== （3）③ ========== -->
+<section>
+  <h2>四、设 100 mol 丙烯记账：有效氢含量<small>（第 3 问③）</small></h2>
+  <label class="sl">丙烷的选择性 = <b id="s1v">16.5</b>%<input id="s1" type="range" min="0" max="40" step="0.5" value="16.5"></label>
+  <label class="sl">正丁醇的选择性 = <b id="s2v">16.5</b>%<input id="s2" type="range" min="0" max="40" step="0.5" value="16.5"></label>
+  <label class="sl">比值 n(正丁醛)/n(异丁醛) = <b id="rrv">66</b><input id="rr" type="range" min="60" max="70" step="1" value="66"></label>
+  <div class="row"><button id="reset">恢复题目数据（132 ℃）</button></div>
+  <div style="font-size:14px;margin-top:8px">已转化的丙烯 100 mol 去了哪里：</div>
+  <div class="bar" id="b1"></div>
+  <div style="font-size:14px;margin-top:8px">参加反应的 H<sub>2</sub> 去了哪里：</div>
+  <div class="bar" id="b2"></div>
+  <div class="legend"><span><i class="s1"></i>丙烷</span><span><i class="s2"></i>正丁醇</span><span><i class="s3"></i>正丁醛</span><span><i class="s4"></i>异丁醛（很窄）</span></div>
+  <table id="ledger"></table>
+  <div class="box" id="effh"></div>
+  <label class="chk"><input type="checkbox" id="w1"><span>错误算法①：忘了生成正丁醇要用 2 份 H<sub>2</sub></span></label>
+  <label class="chk"><input type="checkbox" id="w2"><span>错误算法②：把已变成正丁醇的那部分也算作“有效氢”</span></label>
+  <div class="note" id="wtxt"></div>
+</section>
+
+<!-- ========== （4） ========== -->
+<section>
+  <h2>五、一步一步写阳极反应式<small>（第 4 问）</small></h2>
+  <div class="row"><button data-m="acid" class="on">酸性条件（本题）</button><button data-m="base">碱性条件（变式）</button></div>
+  <div class="eq" id="eq"></div>
+  <div class="box" id="eqtxt"></div>
+  <div class="row"><button id="ep">上一步</button><button id="en" class="on">下一步</button></div>
+</section>
+
+<footer>配合《化学错题本 · 第 10、18 题》第 18 题使用 · 自制教学资源 · 不收集任何数据</footer>
+
+<script>
+"use strict";
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function txt(p,x,y,s,o={}){const t=el('text',Object.assign({x,y,'font-size':12,'text-anchor':'middle','dominant-baseline':'central',fill:'#222'},o),p);t.textContent=s;return t;}
+const $=id=>document.getElementById(id);
+
+/* ========== 一、能量图 ========== */
+let er=3;
+function drawEnergy(){
+  const s=$('energy'); s.innerHTML='';
+  const defs=el('defs',{},s);
+  const mk=el('marker',{id:'ah',markerWidth:8,markerHeight:8,refX:6,refY:4,orient:'auto'},defs); el('path',{d:'M0,0 L8,4 L0,8 z',fill:'#222'},mk);
+  const mk3=el('marker',{id:'ah3',markerWidth:8,markerHeight:8,refX:6,refY:4,orient:'auto'},defs); el('path',{d:'M0,0 L8,4 L0,8 z',fill:'#bbb'},mk3);
+  const mk2=el('marker',{id:'ah2',markerWidth:8,markerHeight:8,refX:6,refY:4,orient:'auto'},defs); el('path',{d:'M0,0 L8,4 L0,8 z',fill:'#b45309'},mk2);
+  el('line',{x1:14,y1:215,x2:14,y2:16,stroke:'#555','stroke-width':1.2,'marker-end':'url(#ah)'},s);
+  txt(s,22,12,'能量',{'font-size':12,'text-anchor':'start'});
+  const y0=40, y1=150, y2=182;   // 能级高低只示意（6.2 的差距放大）
+  const lv=(x1,x2,y)=>el('line',{x1,y1:y,x2,y2:y,stroke:'#222','stroke-width':3},s);
+  lv(40,330,y0); txt(s,185,y0-13,'丙烯(g) + CO(g) + H₂(g)',{'font-size':12.5});
+  lv(196,330,y1); txt(s,263,y1+13,'正丁醛(g)',{'font-size':12.5});
+  lv(40,176,y2); txt(s,108,y2+13,'异丁醛(g)',{'font-size':12.5});
+  const on1=er===1||er===3, on2=er===2||er===3;
+  el('line',{x1:92,y1:y0+3,x2:92,y2:y2-5,stroke:on2?'#222':'#bbb','stroke-width':on2?2:1.2,'marker-end':on2?'url(#ah)':'url(#ah3)'},s);
+  txt(s,99,(y0+y2)/2,'ΔH₂ = −130.0',{'font-size':12.5,'text-anchor':'start',fill:on2?'#222':'#aaa'});
+  el('line',{x1:300,y1:y0+3,x2:300,y2:y1-5,stroke:on1?'#222':'#bbb','stroke-width':on1?2:1.2,'marker-end':on1?'url(#ah)':'url(#ah3)'},s);
+  txt(s,293,(y0+y1)/2,'ΔH₁ = −123.8',{'font-size':12.5,'text-anchor':'end',fill:on1?'#222':'#aaa'});
+  if(er===3){ el('path',{d:`M176,${y2} C194,${y2} 205,${y1+22} 207,${y1+5}`,fill:'none',stroke:'#b45309','stroke-width':2.4,'stroke-dasharray':'6 4','marker-end':'url(#ah2)'},s);
+    txt(s,214,y2+2,'ΔH = +6.2（吸热）',{'font-size':12.5,fill:'#b45309','font-weight':700,'text-anchor':'start'}); }
+  const t={1:'反应Ⅰ：丙烯＋CO＋H₂ → 正丁醛，放热 123.8 kJ·mol⁻¹（往下走 123.8）。',
+    2:'反应Ⅱ：丙烯＋CO＋H₂ → 异丁醛，放热 130.0 kJ·mol⁻¹（往下走 130.0），异丁醛的能量更低。',
+    3:'两种醛从同一起点出发，异丁醛比正丁醛低 130.0 − 123.8 = 6.2。异丁醛 → 正丁醛要“往上爬” 6.2：<b>ΔH = ΔH₁ − ΔH₂ = +6.2 kJ·mol⁻¹</b>（等同于反应Ⅰ − 反应Ⅱ）。'};
+  $('etxt').innerHTML=t[er]+'<br><span style="font-size:13px;color:#5f6368">（能级高低只示意，6.2 的差距放大画出。）</span>';
+}
+document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{er=+b.dataset.r;document.querySelectorAll('[data-r]').forEach(x=>x.classList.toggle('on',x===b));drawEnergy();});
+drawEnergy();
+const GT={ns:'ΔH < 0、ΔS > 0：ΔG 一定小于 0，任何温度都能自发。',nn:'ΔH < 0、ΔS < 0：只有 T 较小时 ΔH − TΔS 才小于 0，低温自发。',
+  ps:'ΔH > 0、ΔS > 0：T 足够大时 TΔS 超过 ΔH，高温自发。<b>本题就是这一格：ΔH = +6.2 > 0 又能自发，所以 ΔS > 0。</b>',
+  pn:'ΔH > 0、ΔS < 0：ΔH − TΔS 永远大于 0，任何温度都不自发——本题反应“能自发”，所以不可能是这一格，ΔS 不能小于 0。'};
+document.querySelectorAll('#gtab td').forEach(td=>td.onclick=()=>{document.querySelectorAll('#gtab td').forEach(x=>x.classList.toggle('on',x===td));$('gtxt').innerHTML=GT[td.dataset.c];});
+document.querySelector('#gtab td[data-c="ps"]').classList.add('on');
+
+/* ========== 二、CO 分压（示意） ========== */
+function drawP(){
+  const p=+$('p').value; $('pv').textContent=p.toFixed(1);
+  const rate=1/p, yieldA=p/(p+3), cat=1/(1+Math.pow(4/p,4));
+  $('m1').style.width=(rate*100).toFixed(1)+'%'; $('m2').style.width=(yieldA*100).toFixed(1)+'%'; $('m3').style.width=(cat*100).toFixed(1)+'%';
+  let m=[];
+  if(cat<0.5) m.push('Co₂(CO)₈(g) ⇌ 2Co(s) + 8CO(g) 平衡正向移动：催化剂大量分解，Co 沉积在器壁上——催化剂损失、传热变坏。');
+  if(yieldA<0.6) m.push('反应Ⅰ、Ⅱ平衡逆向移动，醛的平衡产率低——不利于反应正向进行生成产物。');
+  if(p>=15) m.push('p(CO) 很高：r ∝ p⁻¹(CO)，醛的生成速率明显变慢。');
+  if(!m.length) m.push(p===10?'10 MPa：工业上的折中选择——速率可以接受，催化剂稳定，平衡产率也较高。':'这一区间比较折中：速率、产率、催化剂稳定性都还可以。');
+  $('ptxt').innerHTML=m.join('<br>')+(p<6?'<br><b>这就是第（2）②问的答案：CO 分压不宜过低。</b>':'');
+}
+$('p').addEventListener('input',drawP); drawP();
+
+/* ========== 三、双轴图 ========== */
+// 题图描摹（与纸面图同一组控制点）：x 为温度，y 为左轴读数；右轴读数 = 62 + (y − 45)/5
+const CONV=[[[112,93],[119,77],[123,68],[128.3,60]],[[128.3,60],[136,48],[145,44],[150,44]]];
+const RAT=[[[120.5,86],[123,79],[126,73],[128.3,70]],[[128.3,70],[130,67.5],[131,66],[132,65]],[[132,65],[140,56],[146,54],[150,55]]];
+const bez=(s,t)=>{const u=1-t;return [0,1].map(k=>u*u*u*s[0][k]+3*u*u*t*s[1][k]+3*u*t*t*s[2][k]+t*t*t*s[3][k]);};
+function yAt(segs,x){for(const s of segs){if(x>=s[0][0]-1e-9&&x<=s[3][0]+1e-9){let lo=0,hi=1;for(let i=0;i<60;i++){const m=(lo+hi)/2;if(bez(s,m)[0]<x)lo=m;else hi=m;}return bez(s,(lo+hi)/2)[1];}}return null;}
+const G={L:46,R:300,T:14,B:206}; const gx=t=>G.L+(t-110)/40*(G.R-G.L), gy=v=>G.B-(v-36)/(95-36)*(G.B-G.T);
+const svgG=$('graph');
+function drawGraph(){
+  const T=+$('T').value; $('tv').textContent=T.toFixed(1);
+  svgG.innerHTML='';
+  el('rect',{x:G.L,y:G.T,width:G.R-G.L,height:G.B-G.T,fill:'#fff',stroke:'#444'},svgG);
+  [120,130,140].forEach(t=>{el('line',{x1:gx(t),x2:gx(t),y1:G.B,y2:G.B-4,stroke:'#444'},svgG);txt(svgG,gx(t),G.B+12,String(t),{'font-size':11});});
+  [40,60,80].forEach(v=>{el('line',{x1:G.L,x2:G.L+4,y1:gy(v),y2:gy(v),stroke:'#444'},svgG);txt(svgG,G.L-6,gy(v),String(v),{'font-size':11,'text-anchor':'end'});});
+  [[45,62],[55,64],[65,66],[70,67],[75,68],[85,70]].forEach(([y,l])=>{el('line',{x1:G.R,x2:G.R-4,y1:gy(y),y2:gy(y),stroke:'#444'},svgG);txt(svgG,G.R+5,gy(y),String(l),{'font-size':11,'text-anchor':'start'});});
+  txt(svgG,(G.L+G.R)/2,G.B+28,'温度/℃',{'font-size':12});
+  txt(svgG,12,(G.T+G.B)/2,'丙烯转化率/%',{'font-size':12,transform:`rotate(-90 12 ${(G.T+G.B)/2})`,fill:'var(--c1)'});
+  txt(svgG,345,(G.T+G.B)/2,'n(正丁醛)/n(异丁醛)',{'font-size':12,transform:`rotate(90 345 ${(G.T+G.B)/2})`,fill:'var(--c2)'});
+  const path=segs=>segs.map((s,i)=>(i?'':`M${gx(s[0][0])},${gy(s[0][1])}`)+` C${gx(s[1][0])},${gy(s[1][1])} ${gx(s[2][0])},${gy(s[2][1])} ${gx(s[3][0])},${gy(s[3][1])}`).join('');
+  el('path',{d:path(CONV),fill:'none',stroke:'#111','stroke-width':2.6},svgG);
+  el('path',{d:path(RAT),fill:'none',stroke:'#8a8f96','stroke-width':2.6},svgG);
+  // 原图中的指示箭头
+  const arrow=(x1,y1,x2,y2,c)=>{el('line',{x1:gx(x1),y1:gy(y1),x2:gx(x2),y2:gy(y2),stroke:c,'stroke-width':1.6},svgG);
+    const dir=Math.sign(x2-x1);el('path',{d:`M${gx(x2)},${gy(y2)} l${-dir*7},-4 l0,8 z`,fill:c},svgG);};
+  arrow(120,71,115.5,71,'#111'); arrow(123,81,127.5,81,'#8a8f96');
+  const yc=yAt(CONV,T), yr=yAt(RAT,T);
+  el('line',{x1:gx(T),x2:gx(T),y1:G.T,y2:G.B,stroke:'var(--c4)','stroke-width':1.5,'stroke-dasharray':'5 3'},svgG);
+  if(yc!==null){el('line',{x1:G.L,x2:gx(T),y1:gy(yc),y2:gy(yc),stroke:'var(--c1)','stroke-dasharray':'3 3'},svgG);el('circle',{cx:gx(T),cy:gy(yc),r:5,fill:'var(--c1)'},svgG);}
+  if(yr!==null){el('line',{x1:gx(T),x2:G.R,y1:gy(yr),y2:gy(yr),stroke:'var(--c2)','stroke-dasharray':'3 3'},svgG);el('rect',{x:gx(T)-5,y:gy(yr)-5,width:10,height:10,fill:'var(--c2)'},svgG);}
+  const conv=yc, ratio=yr===null?null:62+(yr-45)/5;
+  $('r1').textContent=conv===null?'—':conv.toFixed(1)+' %';
+  $('r2').textContent=ratio===null?'—':ratio.toFixed(1);
+  let msg='黑线旁的箭头指向<b>左</b>，读左轴；灰线旁的箭头指向<b>右</b>，读右轴。';
+  if(Math.abs(T-128.3)<0.05) msg+='<br>128.3 ℃：丙烯转化率 60%，比值 67。<b>K<sub>p</sub>（异丁醛 ⇌ 正丁醛）= n(正丁醛)/n(异丁醛) = 67</b>；消耗 CO 的只有反应Ⅰ、Ⅱ，而反应Ⅲ还消耗丙烯，所以 <b>CO 的转化率 &lt; 60%</b>。';
+  else if(Math.abs(T-132)<0.05) msg+='<br>132 ℃：比值 66——第（3）③问要用这个读数（正丁醛 : 异丁醛 = 66 : 1）。';
+  else msg+='<br>两条线都随温度升高而下降：升温时两个放热反应都逆向移动。';
+  $('gtxt2').innerHTML=msg;
+  document.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.t-T)<0.05));
+}
+$('T').addEventListener('input',drawGraph);
+document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{$('T').value=b.dataset.t;drawGraph();});
+function gdrag(e){const r=svgG.getBoundingClientRect();const x=(e.clientX-r.left)*360/r.width;let t=110+(x-G.L)/(G.R-G.L)*40;
+  t=Math.max(121,Math.min(150,Math.round(t*10)/10));$('T').value=t;drawGraph();}
+svgG.addEventListener('pointerdown',e=>{svgG.setPointerCapture(e.pointerId);gdrag(e);});
+svgG.addEventListener('pointermove',e=>{if(e.buttons)gdrag(e);});
+drawGraph();
+
+/* ========== 四、记账 ========== */
+const f1=x=>(Math.round(x*100)/100).toString();
+function seg(cls,v,total,lab){const w=Math.max(0,v/total*100);return `<span class="${cls}" style="width:${w}%" title="${lab}">${w>9?lab:''}</span>`;}
+function drawLedger(){
+  const s1=+$('s1').value,s2=+$('s2').value,r=+$('rr').value;
+  $('s1v').textContent=s1;$('s2v').textContent=s2;$('rrv').textContent=r;
+  const rest=100-s1-s2;
+  if(rest<0){$('effh').innerHTML='丙烷与正丁醇的选择性之和不能超过 100%。';return;}
+  const nb=rest*r/(r+1), iso=rest/(r+1), h=s1+2*s2+nb+iso, eff=nb/h*100;
+  $('b1').innerHTML=seg('s1',s1,100,f1(s1))+seg('s2',s2,100,f1(s2))+seg('s3',nb,100,f1(nb))+seg('s4',iso,100,'');
+  $('b2').innerHTML=seg('s1',s1,h,f1(s1))+seg('s2',2*s2,h,f1(2*s2))+seg('s3',nb,h,f1(nb)+'（有效氢）')+seg('s4',iso,h,'');
+  $('ledger').innerHTML='<tr><th>产物</th><th>物质的量/mol</th><th>每 1 mol 用 H₂</th><th>用 H₂/mol</th></tr>'+
+    `<tr><td>丙烷</td><td>${f1(s1)}</td><td>1</td><td>${f1(s1)}</td></tr><tr><td>正丁醇</td><td>${f1(s2)}</td><td>2</td><td>${f1(2*s2)}</td></tr>`+
+    `<tr><td>正丁醛</td><td>${f1(nb)}</td><td>1</td><td>${f1(nb)}</td></tr><tr><td>异丁醛</td><td>${f1(iso)}</td><td>1</td><td>${f1(iso)}</td></tr>`+
+    `<tr><th>合计</th><th>100</th><th>—</th><th>${f1(h)}</th></tr>`;
+  $('effh').innerHTML=`有效氢含量 = 正丁醛用的 H₂ ÷ 参加反应的 H₂ = ${f1(nb)} ÷ ${f1(h)} × 100% ≈ <b>${eff.toFixed(1)}%</b>`+
+    `<br><span style="font-size:13.5px">顺便看（3）②：已转化的 CO = 100 − 丙烷 = ${f1(100-s1)} mol &lt; 已转化的丙烯 100 mol，所以 CO 的转化率小于丙烯的转化率。</span>`;
+  const w=[];
+  if($('w1').checked){const hw=s1+s2+nb+iso;w.push(`错误①：分母 = ${f1(hw)}，算出 ${(nb/hw*100).toFixed(1)}%（题目数据下得 66%）——正丁醇要先经Ⅰ再经Ⅳ，共用 2 份 H₂。`);}
+  if($('w2').checked){w.push(`错误②：分子 = ${f1(nb+s2)}，算出 ${((nb+s2)/h*100).toFixed(1)}%（题目数据下得 70.8%）——已经变成正丁醇的那部分不再是正丁醛。`);}
+  $('wtxt').innerHTML=w.join('<br>');
+}
+['s1','s2','rr','w1','w2'].forEach(id=>$(id).addEventListener('input',drawLedger));
+$('reset').onclick=()=>{$('s1').value=16.5;$('s2').value=16.5;$('rr').value=66;drawLedger();};
+drawLedger();
+
+/* ========== 五、电极反应式 ========== */
+const BUT='CH<sub>3</sub>CH<sub>2</sub>CH<sub>2</sub>CH<sub>2</sub>OH', ALD='CH<sub>3</sub>CH<sub>2</sub>CH<sub>2</sub>CHO', EQ='<span style="letter-spacing:-2px">══</span>';
+const STEPS={acid:[
+  [`${BUT} → ${ALD}`,'第 1 步：写出主要物质。正丁醇在阳极被氧化成正丁醛（去掉了 2 个 H 原子）。'],
+  [`${BUT} → ${ALD}<br><span style="font-size:14px">末端 C：−1 价 → +1 价</span>`,'第 2 步：标化合价。末端碳在 –CH₂OH 中连 2 个 H（各 −1）、1 个 O（+1），为 −1 价；在 –CHO 中连 1 个 H、双键连 O（+2），为 +1 价。升高 2。'],
+  [`${BUT} − 2e<sup>−</sup> → ${ALD}`,'第 3 步：写电子。阳极失电子，化合价升高 2，就是失去 2 个电子，写在左边“−2e⁻”。'],
+  [`${BUT} − 2e<sup>−</sup> → ${ALD} + 2H<sup>+</sup>`,'第 4 步：配电荷。左边失去 2 个电子后相当于带 +2；酸性条件用 H⁺ 配平，右边补 2H⁺。'],
+  [`${BUT} − 2e<sup>−</sup> ${EQ} ${ALD} + 2H<sup>+</sup>`,'第 5 步：查原子。H：左边 10 个，右边 8 + 2 = 10 个；C、O 两边相等。完成！']],
+ base:[
+  [`${BUT} → ${ALD}`,'第 1 步：写出主要物质（同酸性）。'],
+  [`${BUT} → ${ALD}<br><span style="font-size:14px">末端 C：−1 价 → +1 价</span>`,'第 2 步：标化合价，升高 2（同酸性）。'],
+  [`${BUT} − 2e<sup>−</sup> → ${ALD}`,'第 3 步：写电子，失去 2 个电子（同酸性）。'],
+  [`${BUT} − 2e<sup>−</sup> + 2OH<sup>−</sup> → ${ALD}`,'第 4 步：配电荷。碱性条件不能写 H⁺，改在左边加 2OH⁻，使两边电荷都为 0。'],
+  [`${BUT} − 2e<sup>−</sup> + 2OH<sup>−</sup> ${EQ} ${ALD} + 2H<sub>2</sub>O`,'第 5 步：查原子。左边多出的 2 个 OH⁻ 与去掉的 2 个 H 结合成 2H₂O，右边补 2H₂O。H：10 + 2 = 8 + 4；O：1 + 2 = 1 + 2。']]};
+let mode='acid', es=0;
+function drawEq(){const st=STEPS[mode][es];$('eq').innerHTML=st[0];$('eqtxt').innerHTML=st[1];$('ep').disabled=es===0;$('en').disabled=es===4;}
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;es=0;document.querySelectorAll('[data-m]').forEach(x=>x.classList.toggle('on',x===b));drawEq();});
+$('en').onclick=()=>{if(es<4){es++;drawEq();}}; $('ep').onclick=()=>{if(es>0){es--;drawEq();}};
+drawEq();
+</script>
+</body>
+</html>
