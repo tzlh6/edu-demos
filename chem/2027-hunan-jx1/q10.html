@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>转一转、点一点 · 湖南九校联盟一联化学第 10 题</title>
+<style>
+  :root{--ink:#1d1d1f;--sub:#5f6368;--line:#d0d4da;--bg:#fafafa;--card:#fff;
+        --c1:#1f4e79;--c2:#b45309;--c3:#2e7d32;--hl:#fff4c2;--plane:#cfe3f5}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:18px 16px 6px}
+  h1{font-size:20px;margin:0 0 4px;line-height:1.35}
+  .tag{display:inline-block;font-size:12px;color:#fff;background:var(--ink);border-radius:4px;padding:1px 6px;margin-right:6px}
+  .lead{color:var(--sub);font-size:14px;margin:0}
+  section{background:var(--card);margin:12px;border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{font-size:17px;margin:0 0 6px;line-height:1.4}
+  h2 small{font-weight:400;color:var(--sub);font-size:13px}
+  svg{width:100%;height:auto;display:block}
+  #mol3d{touch-action:none;background:#fdfdfd;border:1px solid var(--line);border-radius:8px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  label.sl{display:block;font-size:14px;margin-top:6px}
+  label.sl span{display:inline-block;min-width:3.6em;text-align:right;font-weight:600}
+  input[type=range]{width:100%;height:32px;margin:0}
+  button{font:inherit;font-size:14px;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:18px;padding:5px 12px;margin:6px 6px 0 0;cursor:pointer}
+  button.on{background:var(--ink);color:#fff}
+  .read{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+  .read b{font-size:18px}
+  .box{background:var(--hl);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:15px}
+  .note{font-size:14px;color:var(--sub);margin:8px 0 0}
+  details{margin-top:8px;font-size:15px}
+  summary{cursor:pointer;font-weight:600}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:6px}
+  th,td{border:1px solid var(--line);padding:4px 6px;text-align:center}
+  th{background:#f1f3f5;font-weight:600}
+  td:first-child,th:first-child{white-space:nowrap}
+  td.l{text-align:left}
+  tr.diff td{background:var(--hl);font-weight:600}
+  .verdict{margin-top:8px;font-size:15px;border-left:4px solid var(--ink);padding:4px 8px;background:#f6f7f8}
+  .chk{font-size:14px;display:flex;align-items:center;gap:6px;margin-top:6px}
+  .chk input{width:20px;height:20px}
+  footer{color:var(--sub);font-size:12px;text-align:center;padding:4px 16px 24px}
+  sub,sup{font-size:70%}
+</style>
+</head>
+<body>
+<header>
+  <h1>转一转、点一点：共平面、成环与手性碳</h1>
+  <p class="lead"><span class="tag">第 10 题</span>三个小实验分别对应 B、C、D 三个选项。结论都能在纸面详解里找到，这里让你亲手“动起来”看一遍。</p>
+</header>
+
+<!-- ========== B：共平面 ========== -->
+<section id="secB">
+  <h2>一、转动单键：b 的 9 个碳能否同在一个平面？<small>（B 项）</small></h2>
+  <svg id="mol3d" viewBox="0 0 360 300" aria-label="b 分子的三维球棍模型"></svg>
+  <div class="read" id="cnt">与苯环共平面的碳原子：<b>7 / 9</b></div>
+  <label class="sl">绕 1—7 键转（决定 8 号碳）：<span id="v1">90°</span>
+    <input id="t1" type="range" min="-180" max="180" step="5" value="90"></label>
+  <label class="sl">绕 7—8 键转（决定 N）：<span id="v2">120°</span>
+    <input id="t2" type="range" min="-180" max="180" step="5" value="120"></label>
+  <label class="sl">绕 8—N 键转（决定 9 号碳）：<span id="v3">120°</span>
+    <input id="t3" type="range" min="-180" max="180" step="5" value="120"></label>
+  <div class="row">
+    <button id="flat">一键转到“全部共平面”</button><button id="rand">随便转一转</button>
+  </div>
+  <div class="row">
+    <button data-view="tilt" class="on">斜着看</button><button data-view="side">侧面看（平面成一条线）</button><button data-view="top">正面看</button>
+  </div>
+  <label class="chk"><input type="checkbox" id="showH"><span>显示 H 原子（看 CH<sub>2</sub> 上的 H 在平面前后）</span></label>
+  <p class="note">浅蓝色区域是苯环所在的平面。实心深色圆 = 在平面内的碳；空心圆＋虚线 = 不在平面内的碳，虚线是它到平面的距离。可以用手指拖动图形换角度。</p>
+  <details><summary>为什么转一转就能“转进”平面？</summary>
+    <p>如果一根单键两端的原子都已在平面内，下一个原子绕这根键转一圈会画出一个圆；这根键躺在平面里，圆就一定穿过平面两次（转到 0° 或 180° 时）。1、7 号在平面内 → 转 1—7 键把 8 号转进来；7、8 号在平面内 → 转 7—8 键把 N 转进来；8 号与 N 在平面内 → 转 8—N 键把 9 号转进来。所以 9 个碳最多可以全部共平面，B 正确。</p></details>
+</section>
+
+<!-- ========== C：成环 ========== -->
+<section id="secC">
+  <h2>二、二碘代烃的“两只手”：新环是几元环？<small>（C 项）</small></h2>
+  <div class="row" id="reag">
+    <button data-n="1">ICH<sub>2</sub>I</button><button data-n="2" class="on">ICH<sub>2</sub>CH<sub>2</sub>I</button><button data-n="3">ICH<sub>2</sub>CH<sub>2</sub>CH<sub>2</sub>I</button>
+  </div>
+  <svg id="ring2d" viewBox="0 0 360 230" aria-label="成环过程"></svg>
+  <div class="row"><button id="prev">上一步</button><button id="next" class="on">下一步</button></div>
+  <div class="box" id="ringtxt"></div>
+</section>
+
+<!-- ========== D：手性碳 ========== -->
+<section id="secD">
+  <h2>三、点一点：环上哪些碳是手性碳？<small>（D 项）</small></h2>
+  <div class="row" id="presets">
+    <button data-p="prod" class="on">本题加氢产物</button><button data-p="arom">加氢前的 c</button><button data-p="m">甲基环己烷</button><button data-p="m12">1,2-二甲基</button><button data-p="m13">1,3-二甲基</button><button data-p="m14">1,4-二甲基</button>
+  </div>
+  <svg id="chiral" viewBox="0 0 360 250" aria-label="环上碳原子"></svg>
+  <div class="row"><button id="all">一次检查全部</button><button id="clr">清除</button></div>
+  <div id="cinfo"><p class="note">点环上任意一个碳（1～6 号），看它连着的 4 个原子或原子团是否各不相同。</p></div>
+  <details><summary>为什么 c 的 –NH–CHO 不加 H<sub>2</sub>？</summary>
+    <p>看羰基碳（C=O 中的 C）还连着谁：连 H 和烃基的是醛基；连 N 的是酰胺基。–NH–CHO 中羰基碳连着 N，属于酰胺基（甲酰氨基），高中阶段认为它不与 H<sub>2</sub> 加成。所以 1 mol c 只在苯环上加 3 mol H<sub>2</sub>。就算侧链也加了 H<sub>2</sub>，变化也只在侧链上，环上手性碳的数目不变。</p></details>
+</section>
+
+<footer>配合《化学错题本 · 第 10、18 题》第 10 题使用 · 自制教学资源 · 不收集任何数据</footer>
+
+<script>
+"use strict";
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function txt(p,x,y,s,o={}){const t=el('text',Object.assign({x,y,'font-size':12,'text-anchor':'middle','dominant-baseline':'central',fill:'#222'},o),p);t.textContent=s;return t;}
+const $=id=>document.getElementById(id);
+
+/* ================= 一、三维模型 ================= */
+const V=(x,y,z)=>({x,y,z});
+const vs=(a,b)=>V(a.x-b.x,a.y-b.y,a.z-b.z), va=(a,b)=>V(a.x+b.x,a.y+b.y,a.z+b.z), vm=(a,s)=>V(a.x*s,a.y*s,a.z*s);
+const vc=(a,b)=>V(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x);
+const vn=a=>{const l=Math.hypot(a.x,a.y,a.z);return vm(a,1/l);};
+const rad=d=>d*Math.PI/180;
+// 内坐标放置：键长 r(C–D)，键角 B–C–D，二面角 A–B–C–D（0° 顺式，180° 反式）
+function place(A,B,C,r,th,ph){
+  const bc=vn(vs(C,B)), n=vn(vc(vs(B,A),bc)), m=vc(n,bc);
+  const a=rad(th),f=rad(ph);
+  return va(C,va(vm(bc,-r*Math.cos(a)),va(vm(m,r*Math.sin(a)*Math.cos(f)),vm(n,r*Math.sin(a)*Math.sin(f)))));
+}
+const R=1.39, ang=[30,90,150,210,270,330];
+function build(t1,t2,t3){
+  const A={};
+  ang.forEach((g,i)=>A['C'+(i+1)]=V(R*Math.cos(rad(g)),R*Math.sin(rad(g)),0));
+  const out=(g,d)=>V((R+d)*Math.cos(rad(g)),(R+d)*Math.sin(rad(g)),0);
+  A.C7=out(30,1.51); A.O3=out(150,1.36); A.O4=out(210,1.36);
+  A.H2=out(90,1.08); A.H5=out(270,1.08); A.H6=out(330,1.08);
+  A.HO3=place(A.C2,A.C3,A.O3,0.96,109,180); A.HO4=place(A.C5,A.C4,A.O4,0.96,109,180);
+  A.C8=place(A.C2,A.C1,A.C7,1.53,112,t1);
+  A.H7a=place(A.C2,A.C1,A.C7,1.09,109.5,t1+120); A.H7b=place(A.C2,A.C1,A.C7,1.09,109.5,t1-120);
+  A.N=place(A.C1,A.C7,A.C8,1.46,111,t2);
+  A.H8a=place(A.C1,A.C7,A.C8,1.09,109.5,t2+120); A.H8b=place(A.C1,A.C7,A.C8,1.09,109.5,t2-120);
+  A.C9=place(A.C7,A.C8,A.N,1.34,122,t3);
+  A.HN=place(A.C7,A.C8,A.N,1.01,119,t3+180);
+  A.O9=place(A.C8,A.N,A.C9,1.23,124,0);
+  A.H9=place(A.C8,A.N,A.C9,1.10,113,180);
+  return A;
+}
+const BONDS=[['C1','C2'],['C2','C3'],['C3','C4'],['C4','C5'],['C5','C6'],['C6','C1'],['C1','C7'],['C7','C8'],['C8','N'],['N','C9'],['C9','O9',2],
+  ['C3','O3'],['C4','O4'],['O3','HO3','h'],['O4','HO4','h'],['C2','H2','h'],['C5','H5','h'],['C6','H6','h'],['C7','H7a','h'],['C7','H7b','h'],
+  ['C8','H8a','h'],['C8','H8b','h'],['N','HN','h'],['C9','H9','h']];
+const CARB=['C1','C2','C3','C4','C5','C6','C7','C8','C9'];
+const view={yaw:-32,pitch:-60};
+const VIEWS={tilt:{yaw:-32,pitch:-60},side:{yaw:0,pitch:-90},top:{yaw:0,pitch:0}};
+const svg3=$('mol3d'), CEN=V(2.0,0.7,0), S=33;
+function proj(p){
+  const q=vs(p,CEN), cy=Math.cos(rad(view.yaw)), sy=Math.sin(rad(view.yaw)), cp=Math.cos(rad(view.pitch)), sp=Math.sin(rad(view.pitch));
+  // 先绕 z 轴转 yaw（在平面内转），再绕 x 轴转 pitch（倾斜平面）
+  const x1=q.x*cy-q.y*sy, y1=q.x*sy+q.y*cy, z1=q.z;
+  const y2=y1*cp-z1*sp, z2=y1*sp+z1*cp;
+  return {X:180+S*x1, Y:150-S*y2, Z:z2};
+}
+function draw3d(){
+  const t1=+$('t1').value,t2=+$('t2').value,t3=+$('t3').value, showH=$('showH').checked;
+  $('v1').textContent=t1+'°';$('v2').textContent=t2+'°';$('v3').textContent=t3+'°';
+  const A=build(t1,t2,t3);
+  svg3.innerHTML='';
+  // 苯环平面
+  const corners=[V(-3.4,-3.0,0),V(7.6,-3.0,0),V(7.6,4.4,0),V(-3.4,4.4,0)].map(proj);
+  el('polygon',{points:corners.map(c=>c.X.toFixed(1)+','+c.Y.toFixed(1)).join(' '),fill:'var(--plane)','fill-opacity':.55,stroke:'#7aa7cf','stroke-dasharray':'5 4'},svg3);
+  const P={};for(const k in A)P[k]=proj(A[k]);
+  const inPlane=k=>Math.abs(A[k].z)<0.05;
+  // 不在平面内的重原子：画到平面的虚线
+  for(const k of [...CARB,'N','O9']){ if(!inPlane(k)){const f=proj(V(A[k].x,A[k].y,0));
+    el('line',{x1:P[k].X,y1:P[k].Y,x2:f.X,y2:f.Y,stroke:'#666','stroke-dasharray':'3 3','stroke-width':1},svg3);
+    el('circle',{cx:f.X,cy:f.Y,r:2,fill:'#666'},svg3);} }
+  // 键（按深度排序）
+  const items=[];
+  BONDS.forEach(b=>{ if(b[2]==='h'&&!showH)return; const a=P[b[0]],c=P[b[1]];
+    items.push({z:(a.Z+c.Z)/2-0.01,draw:()=>{
+      if(b[2]===2){const dx=c.Y-a.Y,dy=a.X-c.X,l=Math.hypot(dx,dy)||1,o=2.2;
+        el('line',{x1:a.X+dx/l*o,y1:a.Y+dy/l*o,x2:c.X+dx/l*o,y2:c.Y+dy/l*o,stroke:'#444','stroke-width':2},svg3);
+        el('line',{x1:a.X-dx/l*o,y1:a.Y-dy/l*o,x2:c.X-dx/l*o,y2:c.Y-dy/l*o,stroke:'#444','stroke-width':2},svg3);}
+      else el('line',{x1:a.X,y1:a.Y,x2:c.X,y2:c.Y,stroke:b[2]==='h'?'#999':'#444','stroke-width':b[2]==='h'?1.5:3},svg3);}});});
+  // 原子
+  for(const k in A){ const isH=k[0]==='H'; if(isH&&!showH)continue; const p=P[k];
+    items.push({z:p.Z,draw:()=>{
+      if(isH){el('circle',{cx:p.X,cy:p.Y,r:5,fill:'#fff',stroke:'#888','stroke-width':1.2},svg3);return;}
+      if(k[0]==='C'){const ip=inPlane(k),num=k.slice(1);
+        el('circle',{cx:p.X,cy:p.Y,r:9,fill:ip?'#263238':'#fff',stroke:'#263238','stroke-width':2,'stroke-dasharray':ip?'':'3 2'},svg3);
+        txt(svg3,p.X,p.Y+.5,num,{fill:ip?'#fff':'#263238','font-size':11,'font-weight':700});}
+      else{const col=k[0]==='N'?'var(--c1)':'#b91c1c';
+        el('circle',{cx:p.X,cy:p.Y,r:9,fill:'#fff',stroke:col,'stroke-width':2.4},svg3);
+        txt(svg3,p.X,p.Y+.5,k[0],{fill:col,'font-size':12,'font-weight':700});}}});}
+  items.sort((a,b)=>a.z-b.z).forEach(i=>i.draw());
+  // 计数
+  const ok=CARB.filter(inPlane), nums=ok.map(k=>k.slice(1));
+  $('cnt').innerHTML='与苯环共平面的碳原子：<b>'+ok.length+' / 9</b>（'+nums.join('、')+' 号）'+(ok.length===9?'　<b>全部共平面！</b>':'');
+}
+['t1','t2','t3','showH'].forEach(id=>$(id).addEventListener('input',draw3d));
+$('flat').onclick=()=>{$('t1').value=180;$('t2').value=180;$('t3').value=180;draw3d();};
+$('rand').onclick=()=>{['t1','t2','t3'].forEach(id=>$(id).value=Math.round((Math.random()*360-180)/5)*5);draw3d();};
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{Object.assign(view,VIEWS[b.dataset.view]);
+  document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('on',x===b));draw3d();});
+let drag=null;
+svg3.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};svg3.setPointerCapture(e.pointerId);});
+svg3.addEventListener('pointermove',e=>{if(!drag)return;view.yaw+=(e.clientX-drag.x)*0.5;view.pitch=Math.max(-90,Math.min(90,view.pitch+(e.clientY-drag.y)*0.5));
+  drag={x:e.clientX,y:e.clientY};document.querySelectorAll('[data-view]').forEach(x=>x.classList.remove('on'));draw3d();});
+svg3.addEventListener('pointerup',()=>drag=null);svg3.addEventListener('pointercancel',()=>drag=null);
+draw3d();
+
+/* ================= 二、成环 ================= */
+const svgR=$('ring2d'); let nCH2=2, step=0;
+function drawRing(){
+  svgR.innerHTML='';
+  const cx=262,cy=112,r=50, P=g=>({x:cx+r*Math.cos(rad(g)),y:cy-r*Math.sin(rad(g))});
+  const ring=[30,90,150,210,270,330].map(P);
+  const line=(a,b,o={})=>el('line',Object.assign({x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#222','stroke-width':2},o),svgR);
+  const shorten=(a,b,d1,d2)=>{const dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy);return [{x:a.x+dx/l*d1,y:a.y+dy/l*d1},{x:b.x-dx/l*d2,y:b.y-dy/l*d2}];};
+  const unit=(a,b)=>{const dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy);return {x:dx/l,y:dy/l};};
+  const rot=(u,deg)=>{const t=rad(deg);return {x:u.x*Math.cos(t)-u.y*Math.sin(t),y:u.x*Math.sin(t)+u.y*Math.cos(t)};};
+  // 苯环
+  for(let i=0;i<6;i++)line(ring[i],ring[(i+1)%6]);
+  [[0,5],[3,4],[1,2]].forEach(([i,j])=>{const a=ring[i],b=ring[j],k=.22,s=.16;
+    const a1={x:a.x+(cx-a.x)*k,y:a.y+(cy-a.y)*k},b1={x:b.x+(cx-b.x)*k,y:b.y+(cy-b.y)*k};
+    line({x:a1.x+(b1.x-a1.x)*s,y:a1.y+(b1.y-a1.y)*s},{x:b1.x+(a1.x-b1.x)*s,y:b1.y+(a1.y-b1.y)*s});});
+  line(ring[0],{x:ring[0].x+28,y:ring[0].y-16}); txt(svgR,ring[0].x+38,ring[0].y-22,'R',{'font-size':15});
+  // 新环：正 k 边形，与苯环共用 C3–C4 边
+  const k=4+nCH2, C3=ring[2], C4=ring[3], side=r;
+  const ap=side/(2*Math.tan(Math.PI/k)), mid={x:(C3.x+C4.x)/2,y:(C3.y+C4.y)/2}, cen={x:mid.x-ap,y:mid.y};
+  const R2=side/(2*Math.sin(Math.PI/k)), a0=Math.atan2(C3.y-cen.y,C3.x-cen.x);
+  const vtx=[];for(let i=0;i<k;i++){const t=a0-i*2*Math.PI/k;vtx.push({x:cen.x+R2*Math.cos(t),y:cen.y+R2*Math.sin(t)});}
+  const Ot=vtx[1],Ob=vtx[k-2], CH=vtx.slice(2,k-2), top=CH[0], bot=CH[CH.length-1];
+  if(step>=3) el('polygon',{points:vtx.map(v=>v.x.toFixed(1)+','+v.y.toFixed(1)).join(' '),fill:'var(--hl)',stroke:'var(--c2)','stroke-width':2.5,'stroke-dasharray':'6 3'},svgR);
+  let sg=shorten(C3,Ot,0,9);line(sg[0],sg[1]); sg=shorten(C4,Ob,0,9);line(sg[0],sg[1]);
+  for(let i=0;i+1<CH.length;i++){sg=shorten(CH[i],CH[i+1],13,13);line(sg[0],sg[1]);}
+  if(step>=1){sg=shorten(Ot,top,9,14); line(sg[0],sg[1]);}
+  if(step>=2){sg=shorten(Ob,bot,9,14); line(sg[0],sg[1]);}
+  CH.forEach(p=>{el('rect',{x:p.x-14,y:p.y-8,width:28,height:16,rx:4,fill:'#fff'},svgR);txt(svgR,p.x,p.y,'CH₂',{'font-size':13});});
+  [Ot,Ob].forEach(O=>{el('circle',{cx:O.x,cy:O.y,r:8,fill:'#fff'},svgR);txt(svgR,O.x,O.y,'O',{'font-size':15,fill:'#b91c1c','font-weight':700});});
+  // 还没反应的 O–H 与 C–I
+  const piece=(O,C,done)=>{
+    // 边 O—CH2 的外法线（背离新环中心）
+    const u=unit(O,C), mid={x:(O.x+C.x)/2,y:(O.y+C.y)/2}; let n=rot(u,90);
+    if((mid.x+n.x-cen.x)**2+(mid.y+n.y-cen.y)**2<(mid.x-cen.x)**2+(mid.y-cen.y)**2) n={x:-n.x,y:-n.y};
+    if(done){ txt(svgR,mid.x+n.x*26,mid.y+n.y*26,'HI ↗',{'font-size':13,fill:'var(--c2)','font-weight':700}); return; }
+    el('line',{x1:O.x+u.x*9,y1:O.y+u.y*9,x2:C.x-u.x*14,y2:C.y-u.y*14,stroke:'#999','stroke-width':1.6,'stroke-dasharray':'3 4'},svgR);
+    const Hp={x:O.x+n.x*24+u.x*4,y:O.y+n.y*24+u.y*4}, Ip={x:C.x+n.x*26-u.x*4,y:C.y+n.y*26-u.y*4};
+    let a=shorten(O,Hp,9,7); line(a[0],a[1],{'stroke-width':1.6}); txt(svgR,Hp.x,Hp.y,'H',{'font-size':13,fill:'#444'});
+    a=shorten(C,Ip,12,7); line(a[0],a[1],{'stroke-width':1.6}); txt(svgR,Ip.x,Ip.y,'I',{'font-size':15,fill:'#6b21a8','font-weight':700});
+    el('ellipse',{cx:(Hp.x+Ip.x)/2,cy:(Hp.y+Ip.y)/2,rx:Math.hypot(Hp.x-Ip.x,Hp.y-Ip.y)/2+12,ry:12,
+      transform:`rotate(${Math.atan2(Ip.y-Hp.y,Ip.x-Hp.x)*180/Math.PI} ${(Hp.x+Ip.x)/2} ${(Hp.y+Ip.y)/2})`,fill:'none',stroke:'var(--c2)','stroke-dasharray':'4 3','stroke-width':1.3},svgR);};
+  piece(Ot,top,step>=1); piece(Ob,bot,step>=2);
+  if(step>=3){
+    vtx.forEach((v,i)=>{const q={x:v.x+(cen.x-v.x)*.52,y:v.y+(cen.y-v.y)*.52};el('circle',{cx:q.x,cy:q.y,r:7.5,fill:'var(--c2)'},svgR);
+      txt(svgR,q.x,q.y,String(i+1),{fill:'#fff','font-size':10.5,'font-weight':700});});
+    txt(svgR,cx,cy,'苯环',{'font-size':12,fill:'#555'}); }
+  const names={1:'ICH₂I',2:'ICH₂CH₂I',3:'ICH₂CH₂CH₂I'};
+  const msg=[`第 0 步：b 的两个<b>相邻</b>酚羟基（O–H）分别对着 ${names[nCH2]} 的两端（C–I）。橙色虚线圈里的 H 和 I 将结合成 HI 离开。`,
+    '第 1 步：上面的 O–H 与一端的 C–I 反应：H 和 I 结合成 HI 离开，O 与 CH₂ 连起来（成醚，取代反应）。',
+    '第 2 步：另一端同样反应，又脱去 1 分子 HI——两只“手”都抓住了 O，环闭合了。',
+    `第 3 步：数新环：苯环上 2 个 C ＋ 2 个 O ＋ ${nCH2} 个 CH₂ ＝ <b>${k} 个原子 → ${k} 元环</b>。${nCH2===2?'再加上原来的苯环，产物含 2 个六元环，C 项正确。':'换成 ICH₂CH₂I 才是六元环。'}`];
+  $('ringtxt').innerHTML=msg[step];
+  $('prev').disabled=step===0; $('next').disabled=step===3;
+}
+document.querySelectorAll('#reag button').forEach(b=>b.onclick=()=>{nCH2=+b.dataset.n;step=0;
+  document.querySelectorAll('#reag button').forEach(x=>x.classList.toggle('on',x===b));drawRing();});
+$('next').onclick=()=>{if(step<3){step++;drawRing();}}; $('prev').onclick=()=>{if(step>0){step--;drawRing();}};
+drawRing();
+
+/* ================= 三、手性碳 ================= */
+const svgC=$('chiral');
+const SUBNAME={R:'–CH₂CH₂NHCHO',OCD3:'–OCD₃',CH3:'–CH₃'};
+const PRESETS={prod:{1:'R',3:'OCD3',4:'OCD3'},arom:{1:'R',3:'OCD3',4:'OCD3'},m:{1:'CH3'},m12:{1:'CH3',2:'CH3'},m13:{1:'CH3',3:'CH3'},m14:{1:'CH3',4:'CH3'}};
+let preset='prod', sel=null, showAll=false;
+const cang=[30,90,150,210,270,330], ccx=165, ccy=122, cr=52;
+const cpos=i=>({x:ccx+cr*Math.cos(rad(cang[i-1])),y:ccy-cr*Math.sin(rad(cang[i-1]))});
+const nb=(i,d)=>((i-1+d+6)%6)+1;
+const stationName=(sub)=>sub?('CH（连 '+SUBNAME[sub]+'）'):'CH₂';
+function analyze(i){
+  const subs=PRESETS[preset];
+  if(preset==='arom') return {chiral:false,why:'这是加氢前的苯环：苯环上的碳只连 3 个原子（形成双键），不是手性碳。苯环要先和 H₂ 加成变成环己烷环，才可能出现手性碳。'};
+  if(!subs[i]) return {chiral:false,why:i+' 号碳是 –CH₂–：连着 2 个相同的 H，直接排除，不是手性碳。'};
+  const A=[],B=[];for(let s=1;s<=5;s++){A.push(nb(i,s));B.push(nb(i,-s));}
+  let diff=-1;for(let s=0;s<5;s++){if((subs[A[s]]||'')!==(subs[B[s]]||'')){diff=s;break;}}
+  return {chiral:diff>=0,A,B,diff,subs,why:diff>=0?
+    `${i} 号碳连着：H、${SUBNAME[subs[i]]}、沿环两个方向的两条“路”。两条路在第 ${diff+1} 站不同，所以 4 个原子或原子团各不相同——<b>是手性碳</b>。`:
+    `${i} 号碳连着 H 和 ${SUBNAME[subs[i]]}，但沿环两个方向走，每一站都一样（左右对称），两条“路”是相同的原子团——<b>不是手性碳</b>。`};
+}
+function drawChiral(){
+  svgC.innerHTML='';
+  const subs=PRESETS[preset];
+  const P=[null];for(let i=1;i<=6;i++)P.push(cpos(i));
+  // 选中碳的两条路
+  let an=null; if(sel){an=analyze(sel);}
+  for(let i=1;i<=6;i++){const a=P[i],b=P[nb(i,1)];el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#222','stroke-width':2.2},svgC);}
+  if(preset==='arom')[[1,6],[4,5],[2,3]].forEach(([i,j])=>{const a=P[i],b=P[j],k=.2,s=.16;
+    const a1={x:a.x+(ccx-a.x)*k,y:a.y+(ccy-a.y)*k},b1={x:b.x+(ccx-b.x)*k,y:b.y+(ccy-b.y)*k};
+    el('line',{x1:a1.x+(b1.x-a1.x)*s,y1:a1.y+(b1.y-a1.y)*s,x2:b1.x+(a1.x-b1.x)*s,y2:b1.y+(a1.y-b1.y)*s,stroke:'#222','stroke-width':2.2},svgC);});
+  if(an&&an.A){ // 路线①实线、路线②虚线（只画到出现不同的那一站）
+    const upto=an.diff>=0?an.diff:2;
+    const path=(arr,col,dash,off)=>{let prev=P[sel];for(let s=0;s<=upto;s++){const q=P[arr[s]];
+      const dx=q.y-prev.y,dy=prev.x-q.x,l=Math.hypot(dx,dy);
+      el('line',{x1:prev.x+dx/l*off,y1:prev.y+dy/l*off,x2:q.x+dx/l*off,y2:q.y+dy/l*off,stroke:col,'stroke-width':5,'stroke-linecap':'round','stroke-dasharray':dash,opacity:.85},svgC);prev=q;}};
+    path(an.A,'var(--c1)','',0); path(an.B,'var(--c2)','7 5',0);
+  }
+  // 取代基
+  for(let i=1;i<=6;i++){ if(!subs[i])continue; const g=cang[i-1],a=P[i],e={x:a.x+30*Math.cos(rad(g)),y:a.y-30*Math.sin(rad(g))};
+    el('line',{x1:a.x,y1:a.y,x2:e.x,y2:e.y,stroke:'#222','stroke-width':2.2},svgC);
+    const left=Math.cos(rad(g))<-0.1, lab=(subs[i]==='R'?'CH₂CH₂NHCHO':subs[i]==='OCD3'?(left?'D₃CO':'OCD₃'):(left?'H₃C':'CH₃'));
+    txt(svgC,e.x+(left?-3:3),e.y,lab,{'font-size':13,'text-anchor':left?'end':'start'});}
+  // 碳原子圆点（可点）
+  for(let i=1;i<=6;i++){const a=P[i]; let mark=false;
+    if(showAll){mark=analyze(i).chiral;} else if(sel===i){mark=an.chiral;}
+    const g=el('g',{style:'cursor:pointer'},svgC);
+    el('circle',{cx:a.x,cy:a.y,r:15,fill:'transparent'},g);
+    el('circle',{cx:a.x,cy:a.y,r:9,fill:sel===i?'#263238':'#fff',stroke:'#263238','stroke-width':1.8},g);
+    txt(g,a.x,a.y+.5,String(i),{'font-size':11,'font-weight':700,fill:sel===i?'#fff':'#263238'});
+    if(mark){const dx=a.x-ccx,dy=a.y-ccy,l=Math.hypot(dx,dy);txt(svgC,a.x-dx/l*20,a.y-dy/l*20,'*',{'font-size':20,'font-weight':700,fill:'var(--c3)'});}
+    g.addEventListener('click',()=>{sel=i;showAll=false;drawChiral();});}
+  // 说明
+  const info=$('cinfo');
+  if(showAll){ const list=[1,2,3,4,5,6].filter(i=>analyze(i).chiral);
+    info.innerHTML=`<div class="verdict">这个分子的环上共有 <b>${list.length}</b> 个手性碳原子${list.length?'（'+list.join('、')+' 号，标 *）':''}。${preset==='prod'?'所以 D 项“4 个”是错的，本题选 D。':''}</div>`; return;}
+  if(!sel){info.innerHTML='<p class="note">点环上任意一个碳（1～6 号），看它连着的 4 个原子或原子团是否各不相同。</p>';return;}
+  let html='';
+  if(an.A){ html+='<table><tr><th>站</th><th style="color:var(--c1)">路线①（实线）</th><th style="color:var(--c2)">路线②（虚线）</th></tr>';
+    for(let s=0;s<3;s++){const a=an.A[s],b=an.B[s];
+      html+=`<tr class="${s===an.diff?'diff':''}"><td>第 ${s+1} 站</td><td class="l">${a} 号：${stationName(an.subs[a])}</td><td class="l">${b} 号：${stationName(an.subs[b])}</td></tr>`;
+      if(s===an.diff)break;}
+    html+='</table>';}
+  html+=`<div class="verdict">${an.why}</div>`;
+  info.innerHTML=html;
+}
+document.querySelectorAll('#presets button').forEach(b=>b.onclick=()=>{preset=b.dataset.p;sel=null;showAll=false;
+  document.querySelectorAll('#presets button').forEach(x=>x.classList.toggle('on',x===b));drawChiral();});
+$('all').onclick=()=>{showAll=true;sel=null;drawChiral();}; $('clr').onclick=()=>{showAll=false;sel=null;drawChiral();};
+drawChiral();
+</script>
+</body>
+</html>
