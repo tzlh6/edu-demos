@@ -66,9 +66,11 @@ function createSound(opts){
   pop(){this.tone(260,{dur:.11,gain:.06,to:520})},
   tick(last){this.tone(last?1568:1046,{dur:.05,gain:last?.1:.07,type:'square'})},
   boing(){this.tone(420,{dur:.32,gain:.12,to:140,type:'triangle'});this.tone(160,{dur:.18,gain:.08,type:'sine',delay:.02})},
+  // 点错 / 被嫌弃时的一声喷鼻（提示音层之外的轻量猪声）
+  oops(){this.boing();this.pigSnort({delay:.08})},
 
   // ---- layer 2: single pig moments ----
-  greet(){this.voice(null,{gain:.75})},
+  greet(){if(Math.random()<.5||!this.ctx)this.voice(null,{gain:.75});else this.pigHappy()},
   match(card,streak){const i=card%4,rate=.92+(card%3)*.09+Math.min(streak,4)*.03;this.voice(i,{rate,gain:.95});this.tone(note(523,2+Math.min(streak,6)),{dur:.25,gain:.07,type:'triangle',delay:.05});this.tone(note(523,4+Math.min(streak,6)),{dur:.3,gain:.06,type:'triangle',delay:.11})},
   // 2048: every merge goes "pop" plus a pig grunt; small pigs squeak short and high, big pigs grunt long and low.
   merge(values){values=(Array.isArray(values)?values:[values]).filter(Boolean).sort((a,b)=>a-b).slice(-4);
@@ -90,7 +92,7 @@ function createSound(opts){
   land(){this.noise({freq:500,q:.8,dur:.06,gain:.06,filter:'lowpass'})},
   apple(){this.tone(988,{dur:.08,gain:.08,type:'triangle'});this.tone(1319,{dur:.14,gain:.08,type:'triangle',delay:.06})},
   milestone(){this.tone(784,{dur:.1,gain:.07,type:'square'});this.tone(1046,{dur:.18,gain:.07,type:'square',delay:.1});this.voice(null,{rate:1.15,gain:.6,dur:.25,delay:.12})},
-  crash(){this.boom({big:true,voice:3,rate:.95,gain:.95});[392,311,247].forEach((f,k)=>this.tone(f,{dur:.22,gain:.07,type:'triangle',delay:.35+k*.13}))},
+  crash(){this.boom({big:true,voice:3,rate:.95,gain:.95});this.pigWail(false,{delay:.4,rate:.95});[392,311,247].forEach((f,k)=>this.tone(f,{dur:.22,gain:.07,type:'triangle',delay:.35+k*.13}))},
   hit(combo){this.voice(null,{rate:Math.min(1.55,.96+combo*.045),gain:.95});this.tone(note(659,Math.min(combo,10)),{dur:.12,gain:.06,type:'triangle',delay:.03})},
   boom(o){o=o||{};const big=!!o.big,d=o.delay||0;this.noise({freq:big?2400:1600,to:big?120:200,q:.4,dur:big?.55:.26,gain:big?.32:.13,filter:'lowpass',delay:d});this.tone(big?110:150,{dur:big?.45:.2,gain:big?.32:.12,to:40,delay:d});
    this.voice(o.voice===undefined?null:o.voice,{rate:o.rate||1,gain:o.gain===undefined?.6:o.gain,pan:o.pan||0,delay:d+.02})},
@@ -118,16 +120,89 @@ function createSound(opts){
   matchFall(){this.noise({freq:2400,to:800,dur:.12,gain:.025,filter:'highpass'});this.tone(330,{dur:.08,gain:.03,to:220})},
   matchPower(kind){if(kind==='rainbow'){[0,2,4,5,7,9,12].forEach((v,k)=>this.tone(note(523,v),{dur:.2,gain:.045,delay:k*.045}));this.voice(1,{gain:.35,rate:1.35,dur:.2})}else if(kind==='bomb'){this.noise({freq:850,to:120,dur:.2,gain:.08,filter:'lowpass'});this.tone(130,{dur:.22,gain:.08,to:50});this.voice(3,{gain:.3,rate:1.2,dur:.25})}else{this.noise({freq:800,to:4200,dur:.16,gain:.05});this.tone(390,{dur:.16,gain:.05,to:1400,type:'triangle'})}},
   sliceCut(count,combo){this.noise({freq:4200,to:1300,dur:.075,gain:.065,filter:'highpass'});this.tone(450+Math.min(combo,8)*60,{dur:.1,gain:.06,to:1000});if(count>=2||combo>=3&&combo%3===0)this.voice(combo%4,{gain:.4,rate:Math.min(1.55,1+combo*.06),dur:.2})},
-  sliceDanger(){this.noise({freq:500,to:90,dur:.22,gain:.11,filter:'lowpass'});this.tone(140,{dur:.24,gain:.075,to:60});this.voice(3,{gain:.45,dur:.25})},
+  sliceDanger(){this.noise({freq:500,to:90,dur:.22,gain:.11,filter:'lowpass'});this.tone(140,{dur:.24,gain:.075,to:60});this.voice(3,{gain:.45,dur:.25});this.pigYelp({delay:.12})},
   starShot(){this.tone(1150,{dur:.035,gain:.014,to:650,type:'triangle'})},
   starPop(){this.tone(640,{dur:.09,gain:.04,to:1400});this.noise({freq:2200,dur:.035,gain:.025})},
-  starHit(){this.noise({freq:1800,to:200,dur:.22,gain:.08});this.voice(3,{gain:.4,rate:1.1,dur:.25})},
+  starHit(){this.noise({freq:1800,to:200,dur:.22,gain:.08});this.voice(3,{gain:.4,rate:1.1,dur:.25});this.pigYelp({delay:.1,rate:1.1})},
   starShield(){[262,392,523,784].forEach((f,k)=>this.tone(f,{dur:.3,gain:.05,delay:k*.045,to:f*1.5}));this.voice(2,{gain:.35,dur:.25})},
   rhythmBeat(beat,bpm){const melody=[0,4,7,4,2,5,9,5,4,7,11,7,2,5,7,2];this.tone(note(262,melody[beat%16]),{dur:Math.min(.3,45/bpm),gain:.042,type:'triangle'});if(beat%4===0){this.tone(70,{dur:.12,gain:.085,to:38});this.tone(note(131,[0,0,5,7][Math.floor(beat/4)%4]),{dur:.2,gain:.05,type:'triangle'})}else this.noise({freq:5200,dur:.025,gain:.025,filter:'highpass'})},
   rhythmHit(lane,perfect,combo){this.tone([659,784,988,1175][lane],{dur:.09,gain:perfect?.065:.04,type:'triangle'});if(combo>0&&combo%16===0)this.voice(lane,{gain:.3,rate:1.4,dur:.15})},
   rhythmMiss(){this.tone(185,{dur:.085,gain:.035,to:120})},
+  // ---- 合成猪叫库：本地 Web Audio 生成，走“猪叫”音量层，暂停 / 静音 / 切换游戏一并停止 ----
+  // o: {pts:[[秒,Hz],...] 音高轮廓, dur, gain, am:[Hz,深度] 喉音颤动, vib:[Hz,深度Hz], noise:0–1 气声, nasal:鼻音共鸣强度, pan, delay, wave}
+  pigSynth(o){
+   if(!this.live)return null;const c=this.ctx,t0=c.currentTime+(o.delay||0),dur=o.dur||.25,retro=this.profile==='retro',fairy=this.profile==='fairy';
+   const pitch=(fairy?1.22:1)*(o.rate||1)*(.97+Math.random()*.06),gain=(o.gain||.5)*(retro?.6:1);
+   const now=c.currentTime;this.synthPigs=(this.synthPigs||[]).filter(v=>v.end>now);
+   while(this.synthPigs.length>=4){const old=this.synthPigs.shift();try{old.g.gain.cancelScheduledValues(0);old.g.gain.setTargetAtTime(0,now,.02)}catch(e){}}
+   const out=c.createGain(),am=c.createGain();out.gain.setValueAtTime(.0001,t0);out.gain.exponentialRampToValueAtTime(gain,t0+.018);out.gain.setValueAtTime(gain,t0+Math.max(.03,dur-.07));out.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+   let tail=out;if(c.createStereoPanner&&o.pan){const p=c.createStereoPanner();p.pan.value=Math.max(-1,Math.min(1,o.pan));out.connect(p);tail=p}tail.connect(this.pigBus);
+   am.gain.value=1;am.connect(out);
+   const nodes=[],track=n=>{nodes.push(n);const tr={src:n,g:out,i:-1};this.effects.push(tr);n.onended=()=>{this.effects=this.effects.filter(v=>v!==tr)}};
+   const oscA=c.createOscillator(),oscB=c.createOscillator(),mixB=c.createGain();oscA.type=retro?'square':o.wave||'sawtooth';oscB.type=retro?'square':'square';mixB.gain.value=retro?.2:.28;
+   const pts=o.pts||[[0,260]];[oscA,oscB].forEach((osc,k)=>{const f=osc.frequency,m=k?1.006:1;f.setValueAtTime(pts[0][1]*pitch*m,t0);for(let i=1;i<pts.length;i++)f.exponentialRampToValueAtTime(Math.max(30,pts[i][1]*pitch*m),t0+pts[i][0])});
+   // 鼻腔共鸣：两个带通峰（复古音色时跳过，保持芯片味）
+   let bus=am;if(!retro){const f1=c.createBiquadFilter(),f2=c.createBiquadFilter(),lp=c.createBiquadFilter(),g2=c.createGain();f1.type='bandpass';f1.frequency.value=(fairy?1050:780)*(o.formant||1);f1.Q.value=3+(o.nasal||1)*2;f2.type='bandpass';f2.frequency.value=(fairy?2500:1750)*(o.formant||1);f2.Q.value=5;g2.gain.value=.55;lp.type='lowpass';lp.frequency.value=fairy?4200:3200;
+    lp.connect(f1);lp.connect(f2);f1.connect(am);f2.connect(g2);g2.connect(am);const dry=c.createGain();dry.gain.value=.22;lp.connect(dry);dry.connect(am);bus=lp}
+   oscA.connect(bus);oscB.connect(mixB);mixB.connect(bus);
+   if(o.vib){const l=c.createOscillator(),lg=c.createGain();l.frequency.value=o.vib[0];lg.gain.value=o.vib[1]*pitch;l.connect(lg);lg.connect(oscA.frequency);lg.connect(oscB.frequency);track(l);l.start(t0);l.stop(t0+dur+.05)}
+   if(o.am){const l=c.createOscillator(),lg=c.createGain();l.type='square';l.frequency.value=o.am[0];lg.gain.value=o.am[1];l.connect(lg);lg.connect(am.gain);track(l);l.start(t0);l.stop(t0+dur+.05)}
+   if(o.noise&&this.noiseBuf){const n=c.createBufferSource(),nf=c.createBiquadFilter(),ng=c.createGain();n.buffer=this.noiseBuf;nf.type='bandpass';nf.frequency.value=o.noiseFreq||1300;nf.Q.value=1.4;ng.gain.value=o.noise*.9;n.connect(nf);nf.connect(ng);ng.connect(am);track(n);n.start(t0,Math.random()*.4);n.stop(t0+dur+.02)}
+   [oscA,oscB].forEach(osc=>{track(osc);osc.start(t0);osc.stop(t0+dur+.03)});
+   const v={g:out,end:t0+dur+.05};this.synthPigs.push(v);return v},
+  // 猪猪词汇：每个都带一点随机变化，避免机械重复
+  pigOink(o){o=o||{};this.pigSynth({pts:[[0,230],[.05,300],[.2,180]],dur:.22,gain:.5,am:[38,.45],noise:.25,rate:o.rate,delay:o.delay,pan:o.pan})},
+  pigHum(o){o=o||{};const d=o.delay||0,r=o.rate||1;this.pigSynth({pts:[[0,320],[.1,380],[.2,380],[.28,470],[.42,430]],dur:.44,gain:.55,wave:'triangle',vib:[6,6],noise:.05,formant:.85,rate:r,delay:d});this.pigSynth({pts:[[0,470],[.08,560],[.2,520]],dur:.22,gain:.36,wave:'triangle',noise:.05,formant:.85,rate:r,delay:d+.5})},
+  pigGiggle(o){o=o||{};for(let k=0;k<4;k++)this.pigSynth({pts:[[0,300+k*40],[.04,380+k*45],[.09,280+k*40]],dur:.1,gain:.38,am:[42,.35],noise:.18,rate:o.rate,delay:(o.delay||0)+k*.11})},
+  pigSnort(o){o=o||{};this.pigSynth({pts:[[0,150],[.08,120],[.18,135]],dur:.2,gain:.42,am:[62,.6],noise:.85,noiseFreq:900,nasal:2,rate:o.rate,delay:o.delay})},
+  pigSqueal(o){o=o||{};this.pigSynth({pts:[[0,620],[.12,1150],[.32,980],[.45,820]],dur:.46,gain:.42,vib:[9,28],noise:.12,formant:1.25,rate:o.rate,delay:o.delay})},
+  // 受击哀嚎：先拔高，再颤抖着往下掉；重伤时跟两声抽泣
+  pigWail(big,o){o=o||{};const d=o.delay||0;this.pigSynth({pts:[[0,640],[.07,860],[.45,560],[big?.95:.7,300]],dur:big?.98:.72,gain:big?.6:.5,vib:[6.5,big?38:26],am:[26,.22],noise:.16,formant:1.1,rate:o.rate,delay:d,pan:o.pan});
+   if(big){[0,1].forEach(k=>this.pigSynth({pts:[[0,420-k*40],[.05,470-k*40],[.13,300-k*40]],dur:.14,gain:.32,am:[40,.4],noise:.25,rate:o.rate,delay:d+1.02+k*.17,pan:o.pan}))}},
+  pigYelp(o){o=o||{};this.pigSynth({pts:[[0,880],[.04,1020],[.24,520]],dur:.26,gain:.48,am:[30,.2],noise:.18,formant:1.2,rate:o.rate,delay:o.delay,pan:o.pan})},
+  pigWhimper(o){o=o||{};this.pigSynth({pts:[[0,520],[.25,470],[.55,330]],dur:.56,gain:.52,wave:'triangle',vib:[7,14],noise:.12,rate:o.rate,delay:o.delay})},
+  pigSmug(o){o=o||{};this.pigSynth({pts:[[0,175],[.1,205],[.27,165]],dur:.28,gain:.62,wave:'triangle',noise:.15,nasal:2.2,formant:.8,rate:o.rate,delay:o.delay})},
+  pigSnore(o){o=o||{};const d=o.delay||0;this.pigSynth({pts:[[0,95],[.5,110],[.7,90]],dur:.72,gain:.34,am:[22,.7],noise:.6,noiseFreq:700,nasal:2,rate:o.rate,delay:d});this.noise({freq:2400,q:.8,dur:.55,gain:.035,filter:'highpass',delay:d+.85})},
+  pigCheer(o){o=o||{};const d=o.delay||0;[0,1,2].forEach(k=>this.pigSynth({pts:[[0,300+k*70],[.05,380+k*80],[.12,320+k*70]],dur:.13,gain:.42,am:[40,.35],noise:.2,rate:o.rate,delay:d+k*.13}));this.pigSqueal({rate:o.rate,delay:d+.42})},
+  // 随机挑一个轻快的猪声（不重复上一个）
+  pigHappy(o){const list=['pigOink','pigHum','pigGiggle','pigSmug'];let k;do{k=Math.floor(Math.random()*list.length)}while(k===this.lastHappy&&list.length>1);this.lastHappy=k;this[list[k]](o)},
+  // ---- 猪猪轮盘：每个音效都由舞台时间轴在动作关键帧触发 ----
+  rlPage(){this.noise({freq:5200,to:2200,q:.7,dur:.13,gain:.07,filter:'highpass'});this.noise({freq:1400,to:3800,q:1.4,dur:.09,gain:.035,delay:.05})},
+  rlMagic(){[0,4,7,11,14].forEach((st,k)=>this.tone(note(659,st),{dur:.32,gain:.05,type:'sine',delay:k*.055,to:note(659,st)*1.01}));this.noise({freq:6000,dur:.4,gain:.03,filter:'highpass'});this.voice(0,{rate:1.45,gain:.45,dur:.22,delay:.18})},
+  rlPoof(){this.noise({freq:900,to:300,q:.6,dur:.25,gain:.08,filter:'lowpass'});this.tone(520,{dur:.14,gain:.05,to:260,type:'triangle'})},
+  rlReveal(real){if(real){this.tone(98,{dur:.5,gain:.13,to:73,type:'triangle'});this.tone(147,{dur:.45,gain:.07,type:'triangle',delay:.02});this.noise({freq:300,dur:.3,gain:.06,filter:'lowpass'})}else{this.tone(880,{dur:.12,gain:.07,type:'triangle'});this.tone(1319,{dur:.2,gain:.06,type:'triangle',delay:.08})}},
+  rlUnfold(){this.noise({freq:3200,q:3,dur:.03,gain:.08});this.tone(1200,{dur:.04,gain:.05,type:'square',delay:.09});this.noise({freq:2400,q:3,dur:.03,gain:.07,delay:.16})},
+  rlScan(dur){const d=dur||1;this.tone(420,{dur:d,gain:.035,to:1260,type:'sine'});this.noise({freq:1200,to:5000,q:4,dur:d,gain:.025})},
+  rlBeep(fast){this.tone(fast?1760:1320,{dur:.05,gain:.05,type:'square'})},
+  rlWhoosh(){this.noise({freq:500,to:2600,q:.8,dur:.28,gain:.07})},
+  rlCatch(){this.noise({freq:700,q:1,dur:.07,gain:.08,filter:'lowpass'});this.tone(180,{dur:.08,gain:.06,to:120})},
+  rlChew(k){const r=.9+((k||0)%3)*.08;this.noise({freq:1800*r,q:2.4,dur:.06,gain:.08});this.noise({freq:900*r,q:2,dur:.05,gain:.06,delay:.07});this.tone(160*r,{dur:.05,gain:.03,delay:.02})},
+  rlFart(){const c=this.ctx;if(!this.live)return;const t=c.currentTime,o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(92,t);for(let k=1;k<9;k++)o.frequency.linearRampToValueAtTime(70+((k*37)%30)-k*2,t+k*.07);f.type='lowpass';f.frequency.value=520;f.Q.value=6;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.26,t+.03);g.gain.setValueAtTime(.22,t+.45);g.gain.exponentialRampToValueAtTime(.0001,t+.62);o.connect(f);f.connect(g);g.connect(this.fxBus);const tr={src:o,g,i:-1};this.effects.push(tr);o.onended=()=>{this.effects=this.effects.filter(v=>v!==tr)};o.start(t);o.stop(t+.66);this.noise({freq:260,q:1.2,dur:.55,gain:.06,filter:'lowpass'})},
+  rlCompress(){this.tone(300,{dur:.32,gain:.11,to:90,type:'triangle'});this.tone(620,{dur:.2,gain:.05,to:1240,type:'sine',delay:.22});this.noise({freq:3000,to:900,q:.8,dur:.18,gain:.05,delay:.05})},
+  rlPower(){[0,4,7,12].forEach((st,k)=>this.tone(note(392,st),{dur:.18,gain:.06,type:'triangle',delay:k*.06}))},
+  rlChomp(k){this.noise({freq:1100+(k||0)*120,q:1.6,dur:.09,gain:.09});this.tone(240,{dur:.08,gain:.05,to:140,delay:.03})},
+  rlGulp(){this.tone(320,{dur:.12,gain:.09,to:150});this.tone(180,{dur:.16,gain:.07,to:360,delay:.13})},
+  rlHeart(){[0,4,7].forEach((st,k)=>this.tone(note(784,st),{dur:.26,gain:.06,type:'sine',delay:k*.07}));this.pigHum({delay:.1})},
+  rlSquelch(){this.noise({freq:420,to:900,q:3,dur:.16,gain:.07});this.tone(140,{dur:.12,gain:.04,to:220})},
+  rlSplat(big){this.noise({freq:big?700:1000,to:120,q:.7,dur:big?.42:.3,gain:big?.2:.13,filter:'lowpass'});this.tone(big?90:130,{dur:.24,gain:big?.16:.1,to:50});this.noise({freq:2200,q:2,dur:.08,gain:.05,delay:.03})},
+  rlStruggle(k){this.tone(700+((k||0)%2)*160,{dur:.07,gain:.035,to:520,type:'triangle'});this.noise({freq:500,q:3,dur:.07,gain:.04})},
+  rlSuction(){this.noise({freq:300,to:1200,q:4,dur:.1,gain:.08});this.tone(140,{dur:.08,gain:.06,to:80})},
+  rlStretch(dur){this.tone(160,{dur:dur||.7,gain:.06,to:420,type:'sawtooth'});this.noise({freq:600,to:1600,q:5,dur:dur||.7,gain:.025})},
+  rlPop(){this.tone(220,{dur:.09,gain:.16,to:880});this.noise({freq:2600,q:1.4,dur:.05,gain:.1});this.pigSqueal({delay:.05,rate:1.1})},
+  rlBoing(){this.tone(260,{dur:.42,gain:.09,to:120,type:'triangle'});this.tone(520,{dur:.3,gain:.04,to:260,delay:.04})},
+  rlPlop(){this.tone(300,{dur:.1,gain:.07,to:160});this.noise({freq:800,q:1,dur:.05,gain:.05,filter:'lowpass'})},
+  rlClack(){this.noise({freq:2600,q:4,dur:.035,gain:.09});this.tone(820,{dur:.04,gain:.05,type:'square',delay:.06})},
+  rlHeartbeat(){this.tone(62,{dur:.12,gain:.16,to:44});this.tone(58,{dur:.12,gain:.12,to:42,delay:.2})},
+  rlFire(real,boosted){if(real){this.noise({freq:1600,to:300,q:.6,dur:.18,gain:boosted?.18:.12});this.tone(boosted?110:160,{dur:.2,gain:boosted?.18:.12,to:60})}else{this.noise({freq:1200,to:500,q:.8,dur:.22,gain:.06});this.tone(330,{dur:.2,gain:.05,to:220,type:'triangle'})}},
+  rlHit(boosted,who){this.rlSplat(boosted);this.pigWail(boosted,{delay:.05,rate:who===0?1.12:.92});if(boosted)this.tone(70,{dur:.4,gain:.14,to:38,delay:.02})},
+  rlRelief(){this.tone(523,{dur:.12,gain:.05,type:'triangle'});this.tone(392,{dur:.22,gain:.05,type:'triangle',delay:.1})},
+  rlLoad(k){this.tone(1046+((k||0)%4)*90,{dur:.05,gain:.05,type:'triangle'});this.noise({freq:4200,q:5,dur:.03,gain:.05})},
+  rlItemGet(k){this.tone(note(659,(k||0)%6),{dur:.12,gain:.05,type:'triangle'})},
+  rlSkip(){this.tone(196,{dur:.18,gain:.08,to:147,type:'triangle'});this.rlSquelch()},
+  rlTurn(){this.tone(988,{dur:.07,gain:.04,type:'triangle'})},
+  rlDenied(){this.tone(233,{dur:.09,gain:.06,type:'triangle'});this.tone(196,{dur:.12,gain:.05,type:'triangle',delay:.08})},
   win(){[523,659,784,1047].forEach((f,k)=>this.tone(f,{dur:.35,gain:.09,type:'triangle',delay:k*.09}));[0,1,2,3].forEach((i,k)=>this.voice(i,{gain:.8,delay:.32+k*.17,pan:[-.6,.6,-.25,.25][k]}));this.later(1150,()=>[0,1,2,3].forEach((i,k)=>this.voice(i,{gain:.55,rate:1.08,delay:k*.04,pan:[-.7,.7,-.3,.3][k]})))},
-  lose(){[392,330,262,196].forEach((f,k)=>this.tone(f,{dur:.28,gain:.08,type:'triangle',delay:k*.14}));this.voice(3,{rate:.82,gain:.8,delay:.5})},
+  lose(){[392,330,262,196].forEach((f,k)=>this.tone(f,{dur:.28,gain:.08,type:'triangle',delay:k*.14}));this.voice(3,{rate:.82,gain:.8,delay:.5});this.pigWhimper({delay:1.25})},
   preview(i){this.stop();this.voice(i,{gain:1})}
  };
  return S;

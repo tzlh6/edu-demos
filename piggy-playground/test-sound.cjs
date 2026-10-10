@@ -47,3 +47,14 @@ for(const f of [()=>S.matchPower('rainbow'),()=>S.matchPower('bomb'),()=>S.slice
 S.stop();S.enabled=false;assert.deepEqual(count(()=>{S.sliceCut(3,3);S.starShot();S.starShield();S.rhythmBeat(0,124);S.matchPower('rainbow')}),{osc:0,noise:0,pig:0});S.enabled=true;
 console.log('PASS: animated match powers, slicing combos/hazards, quiet star shots/protection, rhythm beat/judgement; all respect mute.');
 console.log('PASS: small actions use soft cues only; pig voices for match/every 2048 merge (size sets pitch)/catch/eat; jump, land, apple stay synth; combo raises pitch; 99-pig chain pops in sequence with voice cap; stop cancels; mute silences; bag never repeats.');
+// 4.2 合成猪叫库与猪猪轮盘音效
+const pigNames=['pigOink','pigHum','pigGiggle','pigSnort','pigSqueal','pigWail','pigYelp','pigWhimper','pigSmug','pigSnore','pigCheer','pigHappy'];
+const pigFreqs=new Set();for(const n of pigNames){log.length=0;S[n]();const osc=log.filter(x=>x.type==='osc');assert(osc.length>=2,n+' 合成了振荡器');pigFreqs.add(osc[0].freq|0)}
+assert(pigFreqs.size>=8,'猪叫音高各不相同');
+S.stop();assert.equal(S.effects.length,0,'暂停 / 停止取消合成猪叫');
+for(let k=0;k<12;k++)S.pigOink();assert(S.synthPigs.filter(v=>!v.faded).length<=12&&S.synthPigs.length<=4,'同时合成的猪叫最多四只');S.stop();
+const rl=['rlPage','rlMagic','rlPoof','rlUnfold','rlScan','rlBeep','rlWhoosh','rlCatch','rlChew','rlFart','rlCompress','rlPower','rlChomp','rlGulp','rlHeart','rlSquelch','rlSplat','rlStruggle','rlSuction','rlStretch','rlPop','rlBoing','rlPlop','rlClack','rlHeartbeat','rlFire','rlHit','rlRelief','rlLoad','rlItemGet','rlSkip','rlTurn','rlDenied'];
+for(const n of rl){const c=count(()=>S[n](true));assert(c.osc+c.noise>0,n)}
+S.stop();S.enabled=false;assert.deepEqual(count(()=>{S.pigWail(true);S.pigCheer();S.rlFart();S.rlHit(true)}),{osc:0,noise:0,pig:0});S.enabled=true;
+for(const prof of ['soft','fairy','retro']){S.profile=prof;log.length=0;S.pigOink();assert(log.some(x=>x.type==='osc'))}S.profile='soft';
+console.log('PASS: 12 synthesized pig voices (hum, giggle, wail, yelp…) and',rl.length,'roulette cues; capped, stoppable, muted, all three timbres.');
