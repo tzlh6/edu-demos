@@ -6,6 +6,6 @@ function src(role,skin){const key=(skin||active)+'-'+(role||'pig');return root.P
 // 游戏画面里用的无卡片底精灵（同一套造型，透明背景），按需生成并缓存
 const spriteCache={};
 function sprite(role,skin){const key=(skin||active)+'-'+(role||'pig');if(!spriteCache[key])spriteCache[key]=root.PigArt?'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(root.PigArt.svg({skin:skin||active,role:role||'pig',uid:'s'})):src(role,skin);return spriteCache[key]}
-function apply(){document.querySelectorAll('img[data-pig-role]').forEach(im=>im.src=im.hasAttribute('data-pig-sprite')?sprite(im.dataset.pigRole):src(im.dataset.pigRole));document.body.dataset.look=active;document.querySelectorAll('[data-look]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.look===active))}
+function apply(){document.querySelectorAll('img[data-pig-role]').forEach(im=>im.src=im.hasAttribute('data-pig-sprite')?sprite(im.dataset.pigRole):src(im.dataset.pigRole));document.body.dataset.look=active;document.querySelectorAll('button[data-look]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.look===active))}
 root.PigLook={looks,src,sprite,apply,get active(){return active},get colors(){const p=root.PigArt.PALETTES[active];return [p.body,p.shade,p.snout,p.line,p.ear]},get palette(){return root.PigArt.PALETTES[active]},onchange:null,choose(id){if(!looks.some(v=>v[0]===id))return;active=id;try{localStorage.setItem('piggy2-look',JSON.stringify(id))}catch(e){}apply();if(this.onchange)this.onchange(id)}};
 })(window);

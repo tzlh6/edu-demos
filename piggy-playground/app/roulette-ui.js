@@ -211,7 +211,7 @@ function create(ui){
  const BEATS={
   round(t,e){
    const b=beat(1.5);
-   b.start=()=>{const d=t.disp;Object.assign(d,blankDisp(),{wins:e.wins.slice(),round:e.round,turn:e.first});t.actors.forEach(a=>{if(a.costume!==a.role)setCostume(a,a.role)});renderHUD();status();setBanner('第 '+e.round+' 局'+(e.round===3?' · 决胜局':''),'title');Sound.rlTurn();Sound.greet()};
+   b.start=()=>{const d=t.disp;Object.assign(d,blankDisp(),{wins:e.wins.slice(),round:e.round,turn:e.first});t.actors.forEach(a=>{if(a.costume!==a.role)setCostume(a,a.role)});renderHUD();status();setBanner('第 '+e.round+' 局'+(e.round===3?' · 决胜局':''),'title');Sound.rlTurn();if(e.round>1)Sound.greet()};
    b.pose=(T,P)=>{P.a.forEach((o,i)=>{const a=t.actors[i];if(a.down){const up=kf(T,[[0,1],[.7,0,'back']]);mv(o.root,10*up,0,62*up);if(T>.7)a.down=false}else mv(o.root,0,-Math.abs(Math.sin(clamp(T/.5)*Math.PI))*14);o.expr=T<.9?'shock':'happy'})};
    b.end=()=>{t.actors.forEach(a=>a.down=false)};
    return b;

@@ -60,8 +60,9 @@ class Snake{
 class Runner{
  constructor(rng){this.rng=rng||Math.random;this.W=800;this.ground=184;this.speed=330;this.dist=0;this.score=0;this.time=0;this.obs=[];this.apples=[];this.next=520;this.pig={x:70,y:this.ground,vy:0,air:false,duck:false,jumps:0};this.over=false;this.milestone=0;this.applesTaken=0}
  pigBox(){const p=this.pig,w=p.duck&&!p.air?62:50,h=p.duck&&!p.air?26:40;return {x:p.x+6,y:p.y-h+4,w:w-12,h:h-8}}
- jump(){const p=this.pig;if(this.over)return false;if(!p.air){p.vy=-760;p.air=true;p.duck=false;return 'jump'}if(p.jumps<1&&p.vy>-200){p.vy=-620;p.jumps++;return 'double'}return false}
- release(){if(this.pig.air&&this.pig.vy<-320)this.pig.vy=-320}
+ jump(){const p=this.pig;if(this.over)return false;p.cutPending=false;if(!p.air){p.vy=-760;p.air=true;p.duck=false;return 'jump'}if(p.jumps<1&&p.vy>-200){p.vy=-620;p.jumps++;return 'double'}return false}
+ // 松开可以跳得低一点，但至少升到 MIN_HOP，单击（立刻松开）也能跳过最高的篱笆和最宽的泥坑
+ release(){const p=this.pig;if(!p.air||p.vy>=-320)return;if(this.ground-p.y>=Runner.MIN_HOP)p.vy=-320;else p.cutPending=true}
  duck(on){const p=this.pig;p.duck=on;if(on&&p.air)p.vy=Math.max(p.vy,520)}
  spawn(){const r=this.rng,s=this.score;let o;const kind=s>250&&r()<.28?'crow':r()<.22?'mud':'fence';
   if(kind==='fence'){const w=r()<.35?44:22,h=30+Math.floor(r()*18);o={kind,x:this.W+20,y:this.ground-h,w,h}}
@@ -70,7 +71,7 @@ class Runner{
   this.obs.push(o);if(r()<.45)this.apples.push({x:this.W+20+o.w/2+(r()*160-40),y:this.ground-60-Math.floor(r()*70),r:11});
   const minGap=Math.max(260,this.speed*0.62);this.next=minGap+r()*380}
  update(dt){if(this.over)return [];const ev=[];dt=Math.min(dt,.05);this.time+=dt;this.speed=Math.min(820,330+this.time*11);const dx=this.speed*dt;this.dist+=dx;this.score+=dx/18;
-  const p=this.pig;if(p.air){p.vy+=2300*dt;p.y+=p.vy*dt;if(p.y>=this.ground){p.y=this.ground;p.vy=0;p.air=false;p.jumps=0;ev.push('land')}}
+  const p=this.pig;if(p.air){p.vy+=2300*dt;p.y+=p.vy*dt;if(p.cutPending&&this.ground-p.y>=Runner.MIN_HOP){p.cutPending=false;if(p.vy<-320)p.vy=-320}if(p.y>=this.ground){p.y=this.ground;p.vy=0;p.air=false;p.jumps=0;p.cutPending=false;ev.push('land')}}
   this.next-=dx;if(this.next<=0)this.spawn();
   this.obs.forEach(o=>{o.x-=dx*(o.kind==='crow'?1.12:1);if(o.kind==='crow')o.flap+=dt});this.obs=this.obs.filter(o=>o.x+o.w>-20);
   this.apples.forEach(a=>a.x-=dx);const b=this.pigBox();
@@ -79,5 +80,6 @@ class Runner{
   const m=Math.floor(this.score/100);if(m>this.milestone){this.milestone=m;ev.push('milestone')}
   return ev}
 }
+Runner.MIN_HOP=60;
 const api={shuffle,Mine,slideLine,move2048,canMove,spawnTile,Snake,Runner};if(typeof module!=='undefined')module.exports=api;root.PigCore=api;
 })(typeof window!=='undefined'?window:globalThis);
