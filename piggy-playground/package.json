@@ -1,0 +1,52 @@
+{
+  "version": "4.1.0",
+  "build": {
+    "appId": "local.piggy.playground",
+    "portable": {
+      "artifactName": "猪猪游乐场-4.1-Win7兼容.exe"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "app/assets/pig.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "files": [
+      "app/**/*",
+      "main.cjs"
+    ],
+    "productName": "猪猪游乐场",
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "compression": "maximum",
+    "afterPack": "./build/afterPack.cjs"
+  },
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test.cjs && node test-sound.cjs && node test-arcade.cjs && node test-new-games.cjs && node test-challenge.cjs",
+    "build:web": "python build-single.py ../../03_成品/猪猪游乐场v4.1.html",
+    "build:pigs": "python make-pigs.py && python make-match-pigs.py",
+    "build:win": "electron-builder --win portable --ia32 --publish never"
+  },
+  "name": "piggy-playground",
+  "author": "Piggy Playground",
+  "description": "Offline piggy arcade (Windows 7+ compatible)",
+  "devDependencies": {
+    "electron": "22.3.27",
+    "electron-builder": "24.13.3",
+    "pe-library": "^1.0.1",
+    "resedit": "^2.0.3"
+  }
+}
